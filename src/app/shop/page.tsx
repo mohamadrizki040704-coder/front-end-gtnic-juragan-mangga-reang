@@ -1,9 +1,22 @@
+
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { products, formatRupiah } from "./products";
 
-const lokasiOptions = ["Indramayu", "Majalengka", "Cirebon", "Subang"];
-const jenisOptions = ["Harum Manis", "Manalagi", "Gedong Gincu", "Madu"];
+const lokasiOptions = [
+  "Indramayu",
+  "Majalengka",
+  "Cirebon",
+  "Subang",
+];
+
+const jenisOptions = [
+  "Harum Manis",
+  "Manalagi",
+  "Gedong Gincu",
+  "Madu",
+];
 
 type SearchParams = Promise<{
   [key: string]: string | string[] | undefined;
@@ -12,25 +25,53 @@ type SearchParams = Promise<{
 const toArray = (v: string | string[] | undefined) =>
   v === undefined ? [] : Array.isArray(v) ? v : [v];
 
-export default async function ShopPage({
+// HALAMAN UTAMA SHOP
+export default function ShopPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-white p-10">
+          <p>Memuat produk mangga...</p>
+        </main>
+      }
+    >
+      <ShopContent searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+// KOMPONEN YANG MEMBACA SEARCH PARAMS
+async function ShopContent({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
   const params = await searchParams;
-  const q = toArray(params.q)[0]?.toLowerCase().trim() ?? "";
+
+  const q =
+    toArray(params.q)[0]?.toLowerCase().trim() ?? "";
+
   const lokasi = toArray(params.lokasi);
   const jenis = toArray(params.jenis);
+
   const min = Number(toArray(params.min)[0]) || 0;
   const max = Number(toArray(params.max)[0]) || Infinity;
 
+  // FILTER PRODUK
   const filtered = products.filter((p) => {
-    const text = `${p.name} ${p.supplier} ${p.address}`.toLowerCase();
+    const text =
+      `${p.name} ${p.supplier} ${p.address}`.toLowerCase();
 
     return (
       (!q || text.includes(q)) &&
-      (lokasi.length === 0 || lokasi.some((l) => p.address.includes(l))) &&
-      (jenis.length === 0 || jenis.some((j) => p.name.includes(j))) &&
+      (lokasi.length === 0 ||
+        lokasi.some((l) => p.address.includes(l))) &&
+      (jenis.length === 0 ||
+        jenis.some((j) => p.name.includes(j))) &&
       p.price >= min &&
       p.price <= max
     );
@@ -39,7 +80,8 @@ export default async function ShopPage({
   return (
     <main className="min-h-screen overflow-hidden bg-white">
       <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-8">
-        {/* ===== Header ===== */}
+
+        {/* HEADER */}
         <header className="relative flex min-h-48 items-center gap-4 pt-10 sm:gap-8 sm:pt-14 lg:pr-64">
           <div className="w-fit shrink-0">
             <p className="font-serif text-2xl uppercase tracking-wider text-black sm:text-4xl lg:text-5xl">
@@ -72,7 +114,8 @@ export default async function ShopPage({
         </header>
 
         <form action="/shop" method="GET">
-          {/* ===== Search bar ===== */}
+
+          {/* SEARCH BAR */}
           <div className="relative z-10 mt-6 flex max-w-4xl items-center rounded-full border-[3px] border-black bg-white px-6 py-2 shadow-md">
             <input
               type="search"
@@ -83,20 +126,26 @@ export default async function ShopPage({
               className="min-w-0 flex-1 bg-transparent text-sm uppercase tracking-wide text-stone-700 outline-none placeholder:text-stone-400"
             />
 
-            <button type="submit" aria-label="Cari" className="text-2xl">
+            <button
+              type="submit"
+              aria-label="Cari"
+              className="text-2xl"
+            >
               🔍
             </button>
           </div>
 
-          {/* ===== Panel oranye ===== */}
+          {/* PANEL ORANYE */}
           <div className="-mt-7 rounded-t-[3rem] bg-[#FFA800] px-4 pb-0 pt-12 shadow-[0_0_60px_rgba(255,168,0,0.6)] sm:px-7">
             <div className="flex flex-col gap-5 lg:flex-row">
-              {/* ----- Filter ----- */}
-                <aside className="h-fit w-full shrink-0 rounded-4xl bg-white p-5 lg:sticky lg:top-6 lg:w-60">
+
+              {/* FILTER */}
+              <aside className="h-fit w-full shrink-0 rounded-4xl bg-white p-5 lg:sticky lg:top-6 lg:w-60">
                 <h2 className="text-2xl font-black uppercase tracking-[0.45em] text-black">
                   Filter
                 </h2>
 
+                {/* FILTER LOKASI */}
                 <fieldset className="mt-3">
                   <legend className="text-xs font-black uppercase text-black">
                     Lokasi
@@ -126,6 +175,7 @@ export default async function ShopPage({
 
                 <hr className="my-2 border-black" />
 
+                {/* FILTER JENIS MANGGA */}
                 <fieldset>
                   <legend className="text-xs font-black uppercase text-black">
                     Jenis Mangga
@@ -155,6 +205,7 @@ export default async function ShopPage({
 
                 <hr className="my-2 border-black" />
 
+                {/* FILTER HARGA */}
                 <fieldset>
                   <legend className="text-xs font-black uppercase text-black">
                     Harga
@@ -195,9 +246,10 @@ export default async function ShopPage({
                 <hr className="mt-3 border-black" />
               </aside>
 
-              {/* ----- Grid produk ----- */}
+              {/* GRID PRODUK */}
               <div className="flex min-w-0 flex-1 gap-3">
                 <div className="mango-scroll grid max-h-[75vh] min-w-0 flex-1 grid-cols-1 content-start gap-5 overflow-y-auto pb-6 pr-2 sm:grid-cols-2 xl:grid-cols-4">
+
                   {filtered.length === 0 && (
                     <p className="col-span-full py-16 text-center font-bold text-black">
                       Mangga tidak ditemukan. Coba ubah kata kunci atau filter.
@@ -241,7 +293,7 @@ export default async function ShopPage({
                   ))}
                 </div>
 
-                {/* Track scrollbar dekoratif sesuai desain */}
+                {/* SCROLLBAR DEKORATIF */}
                 <div
                   aria-hidden="true"
                   className="hidden h-[75vh] w-3 shrink-0 rounded-full bg-[#D48A00] lg:block"
@@ -254,7 +306,7 @@ export default async function ShopPage({
         </form>
       </section>
 
-      {/* Scrollbar tipis untuk daftar produk */}
+      {/* CUSTOM SCROLLBAR */}
       <style>{`
         .mango-scroll {
           scrollbar-width: thin;
