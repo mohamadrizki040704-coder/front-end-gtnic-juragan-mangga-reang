@@ -64,6 +64,12 @@ export function getRole(token: string | null): string | null {
   return token ? decodeJwt(token)?.role ?? null : null;
 }
 
+export function getUserId(token: string | null): string | null {
+  if (!token) return null;
+  const id = decodeJwt(token)?.user_id;
+  return id === undefined || id === null || id === "" ? null : String(id);
+}
+
 function subscribe(callback: () => void) {
   window.addEventListener(AUTH_EVENT, callback);
   window.addEventListener("storage", callback);

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useCart, type CartItem } from "@/lib/cart";
 import {
   Montserrat,
   Cormorant_Garamond,
@@ -24,18 +24,7 @@ const chakra = Chakra_Petch({
   weight: ["600", "700"],
 });
 
-type Unit = "Kg" | "Ton";
-
-export type CartItem = {
-  id: string;
-  name: string;
-  price: number; // harga per Kg
-  supplier: string;
-  address: string;
-  image: string;
-  qty: number;
-  unit: Unit;
-};
+export type { CartItem };
 
 const rupiah = (n: number) => `Rp.${n.toLocaleString("id-ID")}`;
 const subtotal = (i: CartItem) =>
@@ -52,19 +41,10 @@ const signBtn =
 const pill =
   "h-9 rounded-full bg-white text-center text-sm font-extrabold text-black outline-none focus-visible:ring-4 focus-visible:ring-black/40 md:h-[3.3vw] md:text-[1.5vw]";
 
-export default function Keranjang({
-  initialItems,
-}: {
-  initialItems: CartItem[];
-}) {
-  const [items, setItems] = useState<CartItem[]>(initialItems);
-
-  const update = (id: string, patch: Partial<CartItem>) =>
-    setItems((list) => list.map((i) => (i.id === id ? { ...i, ...patch } : i)));
+export default function Keranjang() {
+  const { items, update, remove } = useCart();
 
   const clamp = (n: number) => Math.min(9999, Math.max(1, n || 1));
-  const remove = (id: string) =>
-    setItems((list) => list.filter((i) => i.id !== id));
 
   const total = items.reduce((sum, i) => sum + subtotal(i), 0);
 

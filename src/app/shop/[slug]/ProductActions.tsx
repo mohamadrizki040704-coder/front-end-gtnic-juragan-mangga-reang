@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Product } from "../products";
+import { useCart } from "../../../lib/cart";
 
 const formatTotal = (amount: number) =>
   new Intl.NumberFormat("id-ID", {
@@ -30,6 +31,7 @@ export default function ProductActions({
   product: Product;
 }) {
   const router = useRouter();
+  const cart = useCart();
 
   const [variant, setVariant] = useState<string | null>("1kg");
   const [jumlah, setJumlah] = useState("");
@@ -84,6 +86,18 @@ export default function ProductActions({
 
   const handleCart = () => {
     if (totalKg <= 0) return;
+
+    cart.add(
+      {
+        id: product.slug,
+        name: product.name,
+        price: product.price,
+        supplier: product.supplier,
+        address: product.address,
+        image: product.image,
+      },
+      totalKg
+    );
 
     setNotice(`${label} ${product.name} masuk keranjang`);
   };
