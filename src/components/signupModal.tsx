@@ -36,7 +36,7 @@ const MANGO_SRC = "/images/manggaLandingP.png";
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "");
 
 // Disesuaikan agar langsung menembak ke /register (tanpa /api) sesuai standar FastAPI
-const REGISTER_ENDPOINT = `${API_URL}/register`;
+const REGISTER_ENDPOINT = `${API_URL}/api/auth/register`;
 
 /* =========================================
    TYPES
