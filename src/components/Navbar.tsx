@@ -119,8 +119,7 @@ const navigation: {
 ========================================= */
 
 export default function Navbar() {
-  // Tambahkan variabel 'name' (atau sesuaikan jika di hook kamu namanya 'username')
-  const { role, name, isLoggedIn, logout } = useAuth();
+  const { role, isLoggedIn, logout } = useAuth();
 
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
@@ -221,13 +220,14 @@ export default function Navbar() {
                 <UserIcon />
               </span>
 
-              {/* TAMPILKAN NAMA USER DI SINI */}
               <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">
-                {name ?? "Akun"}
+                Akun
               </span>
             </button>
 
             {/* ACCOUNT DROPDOWN */}
+
+              
 
             {accountMenuOpen && (
               <div className="absolute right-0 top-full z-999 mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
@@ -240,9 +240,8 @@ export default function Navbar() {
                     Login sebagai {role ?? ""}
                   </p>
 
-                  {/* TAMPILKAN NAMA USER DI DROPDOWN */}
                   <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">
-                    {name ?? "Akun"}
+                    Akun
                   </p>
 
                 </div>
