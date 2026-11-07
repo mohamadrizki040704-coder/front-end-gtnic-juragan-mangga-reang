@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -30,14 +29,14 @@ const montserrat = Montserrat({
 
 const MANGO_SRC = "/images/manggaLandingP.png";
 
-/*
-  Sesuaikan endpoint ini dengan backend kamu.
-  Contoh:
-  NEXT_PUBLIC_API_URL=https://api-domain-kamu.com
-*/
+/* =========================================
+   API ENDPOINT CONFIGURATION
+========================================= */
+// Mengambil URL dari .env (contoh: https://api-juragan-mangga.onrender.com)
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "");
 
-const REGISTER_ENDPOINT = `${API_URL}/api/register`;
+// Disesuaikan agar langsung menembak ke /register (tanpa /api) sesuai standar FastAPI
+const REGISTER_ENDPOINT = `${API_URL}/register`;
 
 /* =========================================
    TYPES
@@ -158,7 +157,7 @@ const inputClass = `${fieldSurface} h-12 w-full rounded-xl px-5 text-xs font-sem
 const eyeButtonClass =
   "absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#5a3300] transition hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60";
 
-const socialButtonClass = `${styles.socialButton} ${fieldSurface} flex h-12 items-center gap-2 rounded-xl px-3 transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/70`;
+const socialButtonClass = `${styles.socialButton || ""} ${fieldSurface} flex h-12 items-center gap-2 rounded-xl px-3 transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/70`;
 
 const socialTextClass =
   "flex-1 text-center text-[9px] font-semibold uppercase leading-snug tracking-[0.3em] text-[#9a5a00] sm:text-[11px]";
@@ -246,7 +245,7 @@ export default function SignupModal({
   };
 
   /* =========================================
-     REGISTER API
+     REGISTER API FETCH
   ========================================= */
 
   const handleSubmit = async (
@@ -256,26 +255,18 @@ export default function SignupModal({
 
     if (loading) return;
 
-    const { username, email, phone, password, confirmPassword } =
-      formData;
+    const { username, email, phone, password, confirmPassword } = formData;
 
     setError("");
     setSuccess("");
 
     /* VALIDASI */
-    if (
-      !username.trim() ||
-      !email.trim() ||
-      !phone.trim() ||
-      !password ||
-      !confirmPassword
-    ) {
+    if (!username.trim() || !email.trim() || !phone.trim() || !password || !confirmPassword) {
       setError("Semua kolom wajib diisi.");
       return;
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailPattern.test(email.trim())) {
       setError("Format email tidak valid.");
       return;
@@ -293,16 +284,14 @@ export default function SignupModal({
 
     /* CEK URL API */
     if (!API_URL) {
-      setError(
-        "URL backend belum dikonfigurasi. Periksa Environment Variables."
-      );
+      setError("URL backend belum dikonfigurasi. Periksa Environment Variables (NEXT_PUBLIC_API_URL).");
       return;
     }
 
     setLoading(true);
 
     try {
-      /* KIRIM DATA KE BACKEND */
+      /* KIRIM DATA KE BACKEND RENDER */
       const response = await fetch(REGISTER_ENDPOINT, {
         method: "POST",
         headers: {
@@ -327,6 +316,7 @@ export default function SignupModal({
 
         throw new Error(
           validationErrors ||
+            result.detail || // Menangkap format error standard FastAPI
             result.message ||
             result.error ||
             `Registrasi gagal. Status: ${response.status}`
@@ -335,8 +325,7 @@ export default function SignupModal({
 
       /* BERHASIL */
       setSuccess(
-        result.message ||
-          "Registrasi berhasil! Akun kamu sudah terdaftar."
+        result.message || "Registrasi berhasil! Akun kamu sudah terdaftar."
       );
 
       setFormData({
@@ -354,7 +343,7 @@ export default function SignupModal({
 
       if (err instanceof TypeError) {
         setError(
-          "Tidak dapat terhubung ke server. Periksa koneksi backend dan konfigurasi CORS."
+          "Tidak dapat terhubung ke server. Periksa koneksi backend dan konfigurasi CORS di Render."
         );
       } else {
         setError(
@@ -370,10 +359,7 @@ export default function SignupModal({
 
   /* CLOSE BACKDROP */
   const handleBackdrop = (event: MouseEvent<HTMLDivElement>) => {
-    if (
-      event.target === event.currentTarget &&
-      !loading
-    ) {
+    if (event.target === event.currentTarget && !loading) {
       onClose();
     }
   };
@@ -394,7 +380,7 @@ export default function SignupModal({
           role="dialog"
           aria-modal="true"
           aria-labelledby="signup-title"
-          className={`${styles.signupCard} ${styles.cardVisible} ${montserrat.className} relative w-full max-w-[1180px] rounded-[2.5rem] [container-type:inline-size]`}
+          className={`${styles.signupCard || ""} ${styles.cardVisible || ""} ${montserrat.className} relative w-full max-w-[1180px] rounded-[2.5rem] [container-type:inline-size]`}
           style={{
             background:
               "linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 18%, #FFF3D6 38%, #FFD04D 70%, #FFAE00 100%)",
@@ -413,7 +399,7 @@ export default function SignupModal({
 
           {/* MANGGA */}
           <div className="pointer-events-none absolute -top-14 left-1/2 z-20 w-[95px] -translate-x-1/2 md:-left-[1%] md:-top-[2%] md:w-[19%] md:translate-x-0">
-            <div className={styles.mangoFloat}>
+            <div className={styles.mangoFloat || ""}>
               <Image
                 src={MANGO_SRC}
                 alt="Mangga utuh dan potongan mangga"
@@ -471,14 +457,12 @@ export default function SignupModal({
           <div className="px-6 pb-10 pt-8 md:pb-[8cqw] md:pl-[5cqw] md:pr-[8cqw] md:pt-[7cqw]">
             <form onSubmit={handleSubmit} noValidate>
               <div className="grid gap-5 md:grid-cols-2 md:gap-x-[5cqw]">
-
                 {/* KOLOM KIRI */}
                 <div className="flex flex-col gap-5 md:gap-[2.7cqw]">
                   <div>
                     <label htmlFor="signup-username" className="sr-only">
                       Username
                     </label>
-
                     <input
                       ref={usernameRef}
                       id="signup-username"
@@ -497,7 +481,6 @@ export default function SignupModal({
                     <label htmlFor="signup-password" className="sr-only">
                       Password
                     </label>
-
                     <input
                       id="signup-password"
                       name="password"
@@ -509,17 +492,10 @@ export default function SignupModal({
                       disabled={loading}
                       className={`${inputClass} pr-12`}
                     />
-
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowPassword((previous) => !previous)
-                      }
-                      aria-label={
-                        showPassword
-                          ? "Sembunyikan password"
-                          : "Tampilkan password"
-                      }
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                       aria-pressed={showPassword}
                       className={eyeButtonClass}
                     >
@@ -528,13 +504,9 @@ export default function SignupModal({
                   </div>
 
                   <div className="relative">
-                    <label
-                      htmlFor="signup-confirm-password"
-                      className="sr-only"
-                    >
+                    <label htmlFor="signup-confirm-password" className="sr-only">
                       Konfirmasi password
                     </label>
-
                     <input
                       id="signup-confirm-password"
                       name="confirmPassword"
@@ -546,17 +518,10 @@ export default function SignupModal({
                       disabled={loading}
                       className={`${inputClass} pr-12`}
                     />
-
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowConfirm((previous) => !previous)
-                      }
-                      aria-label={
-                        showConfirm
-                          ? "Sembunyikan konfirmasi password"
-                          : "Tampilkan konfirmasi password"
-                      }
+                      onClick={() => setShowConfirm((prev) => !prev)}
+                      aria-label={showConfirm ? "Sembunyikan konfirmasi password" : "Tampilkan konfirmasi password"}
                       aria-pressed={showConfirm}
                       className={eyeButtonClass}
                     >
@@ -571,7 +536,6 @@ export default function SignupModal({
                     <label htmlFor="signup-phone" className="sr-only">
                       Nomor WhatsApp
                     </label>
-
                     <input
                       id="signup-phone"
                       name="phone"
@@ -589,7 +553,6 @@ export default function SignupModal({
                     <label htmlFor="signup-email" className="sr-only">
                       Email
                     </label>
-
                     <input
                       id="signup-email"
                       name="email"
@@ -636,10 +599,7 @@ export default function SignupModal({
 
             {/* SOCIAL */}
             <div className="mx-auto mt-8 grid max-w-[34rem] gap-4 sm:grid-cols-2 md:mt-[4cqw] md:gap-[2cqw]">
-              <button
-                type="button"
-                className={socialButtonClass}
-              >
+              <button type="button" className={socialButtonClass}>
                 <GoogleIcon />
                 <span className={socialTextClass}>
                   Login with
@@ -648,10 +608,7 @@ export default function SignupModal({
                 </span>
               </button>
 
-              <button
-                type="button"
-                className={socialButtonClass}
-              >
+              <button type="button" className={socialButtonClass}>
                 <WhatsAppIcon />
                 <span className={socialTextClass}>
                   Login with
@@ -689,10 +646,7 @@ export function SignupTrigger({
         {children}
       </button>
 
-      <SignupModal
-        open={open}
-        onClose={() => setOpen(false)}
-      />
+      <SignupModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 }
