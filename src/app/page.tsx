@@ -9,28 +9,28 @@ const products = [
     price: 20000,
     supplier: "Supplier Mangga A",
     address: "Indramayu, Jawa Barat",
-    image: "/images/mangga-harumanis.png",
+    image: "/images/manggaHarumManis.png",
   },
   {
     name: "Mangga Manalagi",
     price: 22000,
     supplier: "Supplier Mangga B",
     address: "Majalengka, Jawa Barat",
-    image: "/images/mangga-manalagi.png",
+    image: "/images/manggaManalagi.png",
   },
   {
     name: "Mangga Gedong Gincu",
     price: 52000,
     supplier: "Supplier Mangga C",
     address: "Cirebon, Jawa Barat",
-    image: "/images/mangga-gedong.png",
+    image: "/images/manggaGedongGincu.png",
   },
   {
     name: "Mangga Madu",
     price: 25000,
     supplier: "Supplier Mangga D",
     address: "Indramayu, Jawa Barat",
-    image: "/images/mangga-madu.png",
+    image: "/images/manggaMadu.png",
   },
 ];
 
