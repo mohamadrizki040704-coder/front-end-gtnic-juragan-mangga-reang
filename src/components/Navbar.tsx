@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -119,7 +120,7 @@ const navigation: {
 ========================================= */
 
 export default function Navbar() {
-  const { role, isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
 
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
@@ -213,7 +214,7 @@ export default function Navbar() {
               </span>
 
               <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">
-                {role ?? "Akun"}
+                AKUN
               </span>
             </button>
 
@@ -228,9 +229,8 @@ export default function Navbar() {
                   </p>
 
                   <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">
-                    {role ?? "Akun"}
+                    AKUN
                   </p>
-
                 </div>
 
                 <button
