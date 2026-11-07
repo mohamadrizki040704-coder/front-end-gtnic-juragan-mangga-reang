@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -120,7 +119,8 @@ const navigation: {
 ========================================= */
 
 export default function Navbar() {
-  const { role, isLoggedIn, logout } = useAuth();
+  // Tambahkan variabel 'name' (atau sesuaikan jika di hook kamu namanya 'username')
+  const { role, name, isLoggedIn, logout } = useAuth();
 
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
@@ -173,7 +173,7 @@ export default function Navbar() {
       </nav>
 
       {/* =========================================
-          ACCOUNT AREA
+         ACCOUNT AREA
       ========================================= */}
 
       <div className={styles.accountArea}>
@@ -221,8 +221,9 @@ export default function Navbar() {
                 <UserIcon />
               </span>
 
+              {/* TAMPILKAN NAMA USER DI SINI */}
               <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">
-                {role ?? "Akun"}
+                {name ?? "Akun"}
               </span>
             </button>
 
@@ -236,11 +237,12 @@ export default function Navbar() {
                 <div className="border-b border-orange-100 bg-orange-50 px-5 py-4">
 
                   <p className="text-xs font-medium uppercase tracking-widest text-orange-700">
-                    Login sebagai
+                    Login sebagai {role ?? ""}
                   </p>
 
+                  {/* TAMPILKAN NAMA USER DI DROPDOWN */}
                   <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">
-                    {role ?? "Akun"}
+                    {name ?? "Akun"}
                   </p>
 
                 </div>
