@@ -32,11 +32,16 @@ const MANGO_SRC = "/images/manggaLandingP.png";
 /* =========================================
    API ENDPOINT CONFIGURATION
 ========================================= */
-// Mengambil URL dari .env (contoh: https://api-juragan-mangga.onrender.com)
-const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "");
+// Dari env Vercel, contoh: https://api-juragan-mangga.onrender.com
+// (tanpa "/" di akhir, tanpa "/api", dan BUKAN format markdown [..](..))
+const API_URL = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/+$/, "");
 
-// Disesuaikan agar langsung menembak ke /register (tanpa /api) sesuai standar FastAPI
+// Route backend FastAPI: POST /api/auth/register
 const REGISTER_ENDPOINT = `${API_URL}/api/auth/register`;
+
+// Role yang dikirim saat register. Pilihan valid: "BUYER_B2B" | "PETANI"
+// ("ADMIN_GUDANG" ditolak backend)
+const DEFAULT_ROLE = "BUYER_B2B";
 
 /* =========================================
    TYPES
@@ -50,6 +55,11 @@ type SignupModalProps = {
 type SignupTriggerProps = {
   children: ReactNode;
   className?: string;
+};
+
+type FastApiValidationItem = {
+  loc?: (string | number)[];
+  msg?: string;
 };
 
 /* =========================================
@@ -277,6 +287,11 @@ export default function SignupModal({
       return;
     }
 
+    if (password.length > 72) {
+      setError("Password maksimal 72 karakter.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Konfirmasi password tidak cocok.");
       return;
@@ -288,55 +303,44 @@ export default function SignupModal({
       return;
     }
 
+    if (!/^https?:\/\//.test(API_URL)) {
+      setError("NEXT_PUBLIC_API_URL harus diawali https:// (cek format di Vercel).");
+      return;
+    }
+
     setLoading(true);
 
     try {
       /* KIRIM DATA KE BACKEND RENDER */
       const response = await fetch(REGISTER_ENDPOINT, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
-  body: JSON.stringify({
-    email: email.trim(),
-    password: password,
-    namaLengkap: username.trim(),
-    role: "BUYER_B2B", // atau "PETANI"
-  }),
-});
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password,
+          namaLengkap: username.trim(),
+          role: DEFAULT_ROLE,
+        }),
+      });
 
-const result = await response.json().catch(() => ({}));
-
-if (!response.ok) {
-  // FastAPI 422: detail berupa array of object; 409/403: detail berupa string
-  const detail = Array.isArray(result.detail)
-    ? result.detail
-        .map((d: { loc?: (string | number)[]; msg?: string }) =>
-          `${d.loc?.slice(1).join(".")}: ${d.msg}`
-        )
-        .join(", ")
-    : result.detail;
-
-  throw new Error(
-    detail ||
-      result.message ||
-      result.error ||
-      `Registrasi gagal. Status: ${response.status}`
-  );
-}
-
-      /* BACA RESPONS */
+      /* BACA RESPONS (hanya sekali) */
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        const validationErrors = result.errors
-          ? Object.values(result.errors).flat().join(" ")
-          : "";
+        // FastAPI 422: detail = array of object; 409/403: detail = string
+        const detail = Array.isArray(result.detail)
+          ? (result.detail as FastApiValidationItem[])
+              .map((d) => `${d.loc?.slice(1).join(".") ?? "field"}: ${d.msg ?? "tidak valid"}`)
+              .join(", ")
+          : typeof result.detail === "string"
+            ? result.detail
+            : "";
 
         throw new Error(
-          validationErrors ||
-            result.detail || // Menangkap format error standard FastAPI
+          detail ||
             result.message ||
             result.error ||
             `Registrasi gagal. Status: ${response.status}`
