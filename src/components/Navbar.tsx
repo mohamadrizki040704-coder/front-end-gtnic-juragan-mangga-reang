@@ -120,9 +120,13 @@ const navigation: {
 ========================================= */
 
 export default function Navbar() {
-  const { isLoggedIn, logout } = useAuth();
+  const { role, isLoggedIn, logout } = useAuth();
 
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+
+  /* =========================================
+     HANDLE LOGOUT
+  ========================================= */
 
   const handleLogout = () => {
     logout();
@@ -168,7 +172,9 @@ export default function Navbar() {
         ))}
       </nav>
 
-      {/* ACCOUNT AREA */}
+      {/* =========================================
+          ACCOUNT AREA
+      ========================================= */}
 
       <div className={styles.accountArea}>
 
@@ -200,6 +206,8 @@ export default function Navbar() {
         {isLoggedIn && (
           <div className="relative">
 
+            {/* USER BUTTON */}
+
             <button
               type="button"
               onClick={() =>
@@ -214,7 +222,7 @@ export default function Navbar() {
               </span>
 
               <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">
-                AKUN
+                {role ?? "Akun"}
               </span>
             </button>
 
@@ -223,15 +231,21 @@ export default function Navbar() {
             {accountMenuOpen && (
               <div className="absolute right-0 top-full z-999 mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
 
+                {/* ACCOUNT INFORMATION */}
+
                 <div className="border-b border-orange-100 bg-orange-50 px-5 py-4">
+
                   <p className="text-xs font-medium uppercase tracking-widest text-orange-700">
                     Login sebagai
                   </p>
 
                   <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">
-                    AKUN
+                    {role ?? "Akun"}
                   </p>
+
                 </div>
+
+                {/* LOGOUT BUTTON */}
 
                 <button
                   type="button"
@@ -255,6 +269,7 @@ export default function Navbar() {
                   </svg>
 
                   LOGOUT
+
                 </button>
 
               </div>
@@ -263,7 +278,9 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* SHOPPING CART */}
+        {/* =========================================
+            SHOPPING CART
+        ========================================= */}
 
         <Link
           href="/keranjang"
