@@ -293,18 +293,38 @@ export default function SignupModal({
     try {
       /* KIRIM DATA KE BACKEND RENDER */
       const response = await fetch(REGISTER_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          username: username.trim(),
-          email: email.trim(),
-          phone: phone.trim(),
-          password: password,
-        }),
-      });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+  body: JSON.stringify({
+    email: email.trim(),
+    password: password,
+    namaLengkap: username.trim(),
+    role: "BUYER_B2B", // atau "PETANI"
+  }),
+});
+
+const result = await response.json().catch(() => ({}));
+
+if (!response.ok) {
+  // FastAPI 422: detail berupa array of object; 409/403: detail berupa string
+  const detail = Array.isArray(result.detail)
+    ? result.detail
+        .map((d: { loc?: (string | number)[]; msg?: string }) =>
+          `${d.loc?.slice(1).join(".")}: ${d.msg}`
+        )
+        .join(", ")
+    : result.detail;
+
+  throw new Error(
+    detail ||
+      result.message ||
+      result.error ||
+      `Registrasi gagal. Status: ${response.status}`
+  );
+}
 
       /* BACA RESPONS */
       const result = await response.json().catch(() => ({}));
