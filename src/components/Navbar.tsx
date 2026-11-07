@@ -7,6 +7,7 @@ import styles from "./Navbar.module.css";
 
 import { LoginTrigger } from "./loginModal";
 import { SignupTrigger } from "./signupModal";
+import { useAuth } from "../lib/auth";
 
 /* =========================================
    SVG PROPERTIES
@@ -98,6 +99,8 @@ const navigation: {
 ========================================= */
 
 export default function Navbar() {
+  const { isLoggedIn, logout } = useAuth();
+
   return (
     <header className={styles.header}>
 
@@ -143,24 +146,32 @@ export default function Navbar() {
         {/* LOGIN & SIGN UP */}
 
         <div className={styles.accountLinks}>
-          {/* LOGIN */}
+          {isLoggedIn ? (
+            <button
+              type="button"
+              onClick={logout}
+              className={styles.loginLink}
+            >
+              LOGOUT
+            </button>
+          ) : (
+            <>
+              <LoginTrigger className={styles.loginLink}>
+                LOGIN
+              </LoginTrigger>
 
-          <LoginTrigger className={styles.loginLink}>
-            LOGIN
-          </LoginTrigger>
+              <span
+                className={styles.divider}
+                aria-hidden="true"
+              >
+                |
+              </span>
 
-          <span
-            className={styles.divider}
-            aria-hidden="true"
-          >
-            |
-          </span>
-
-          {/* SIGN UP */}
-
-          <SignupTrigger className={styles.signupLink}>
-            SIGN UP
-          </SignupTrigger>
+              <SignupTrigger className={styles.signupLink}>
+                SIGN UP
+              </SignupTrigger>
+            </>
+          )}
         </div>
 
         {/* SHOPPING CART */}

@@ -16,6 +16,7 @@ import {
 } from "next/font/google";
 
 import styles from "./Animation.module.css";
+import { loginRequest } from "../lib/auth";
 
 /* =========================================
    FONT
@@ -284,6 +285,8 @@ export default function LoginModal({
 
   const [error, setError] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const dialogRef = useRef<HTMLDivElement>(null);
 
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -409,31 +412,44 @@ export default function LoginModal({
      LOGIN VALIDATION
   ========================================= */
 
-  function handleSubmit(
+  async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>
   ) {
     e.preventDefault();
 
-    const data = new FormData(e.currentTarget);
+    if (loading) return;
 
-    const username = String(
-      data.get("username") ?? ""
-    ).trim();
+    const form = e.currentTarget;
+    const data = new FormData(form);
 
-    const password = String(
-      data.get("password") ?? ""
-    );
+    const email = String(data.get("email") ?? "").trim();
+    const password = String(data.get("password") ?? "");
 
-    if (!username || !password) {
-      setError("Username dan password wajib diisi.");
+    if (!email || !password) {
+      setError("Email dan password wajib diisi.");
       return;
     }
 
     setError("");
+    setLoading(true);
 
-    // TODO:
-    // Sambungkan dengan API login backend.
-    // Jika login berhasil, panggil onClose().
+    try {
+      await loginRequest(email, password);
+      form.reset();
+      onClose();
+    } catch (err) {
+      if (err instanceof TypeError) {
+        setError(
+          "Tidak dapat terhubung ke server. Periksa koneksi dan konfigurasi CORS."
+        );
+      } else {
+        setError(
+          err instanceof Error ? err.message : "Login gagal."
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   /* =========================================
@@ -680,19 +696,20 @@ export default function LoginModal({
 
             <div className="relative">
               <label
-                htmlFor="login-username"
+                htmlFor="login-email"
                 className="sr-only"
               >
-                Username
+                Email
               </label>
 
               <input
                 ref={usernameRef}
-                id="login-username"
-                name="username"
-                type="text"
-                autoComplete="username"
-                placeholder="Username"
+                id="login-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="Email"
+                disabled={loading}
                 className={`${inputClass} pr-16`}
               />
 
@@ -724,6 +741,7 @@ export default function LoginModal({
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 placeholder="Password"
+                disabled={loading}
                 className={`${inputClass} pr-28`}
               />
 
@@ -771,10 +789,13 @@ export default function LoginModal({
 
             <button
               type="submit"
+              disabled={loading}
               className="
                 relative z-10
                 mx-auto
                 h-12 w-[86%]
+                disabled:cursor-not-allowed
+                disabled:opacity-60
                 rounded-full
                 bg-white
                 text-base font-semibold
@@ -790,7 +811,7 @@ export default function LoginModal({
                 sm:h-14 sm:text-lg
               "
             >
-              Login
+              {loading ? "Masuk..." : "Login"}
             </button>
 
             {/* ERROR MESSAGE */}
