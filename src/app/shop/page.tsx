@@ -62,26 +62,25 @@ async function ShopContent({
     <main className="min-h-screen overflow-hidden bg-white w-full">
       <section className="mx-auto w-full max-w-7xl px-4 pt-6 sm:px-8">
         
-        {/* HEADER - Diubah jadi flex-col untuk mobile, flex-row untuk desktop */}
-        <header className="relative flex flex-col md:flex-row min-h-48 items-center md:items-start lg:items-center gap-4 pt-10 sm:gap-8 sm:pt-14 lg:pr-64 text-center md:text-left">
-          <div className="w-fit shrink-0">
-            <p className="font-serif text-xl uppercase tracking-wider text-black sm:text-4xl lg:text-5xl">
+        {/* HEADER DIPERBAIKI: flex-col murni di mobile agar tidak numpuk */}
+        <header className="relative flex flex-col md:flex-row w-full items-center md:items-start gap-3 pt-6 md:pt-14 pb-4 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start w-fit shrink-0">
+            <p className="font-serif text-2xl md:text-4xl lg:text-5xl uppercase tracking-wider text-black">
               Juragan Mangga
             </p>
 
-            <p className="mt-1 flex justify-center md:justify-between text-4xl font-black leading-none text-[#FFA800] sm:text-6xl lg:text-7xl gap-1 md:gap-0">
+            <p className="mt-1 flex text-5xl sm:text-6xl lg:text-7xl font-black leading-none text-[#FFA800] gap-1 md:gap-0">
               {"REANG".split("").map((c, i) => (
                 <span key={i}>{c}</span>
               ))}
             </p>
 
-            <div className="mt-3 h-1.5 w-full bg-[#FFA800]" />
+            <div className="mt-2 h-1.5 w-full bg-[#FFA800]" />
           </div>
 
-          {/* Garis vertikal disembunyikan di HP, tampil di layar medium ke atas */}
           <div className="hidden md:block h-20 w-0.5 shrink-0 bg-black sm:h-28" />
 
-          <h1 className="text-5xl font-black uppercase leading-none text-black drop-shadow-[0_12px_14px_rgba(0,0,0,0.25)] sm:text-7xl lg:text-8xl xl:text-9xl">
+          <h1 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black uppercase leading-none text-black drop-shadow-[0_12px_14px_rgba(0,0,0,0.25)]">
             Shop
           </h1>
 
@@ -96,7 +95,7 @@ async function ShopContent({
         </header>
 
         <form action="/shop" method="GET" className="w-full">
-          {/* SEARCH BAR - Perbaikan lebar dan ukuran font agar tidak terpotong */}
+          {/* SEARCH BAR */}
           <div className="relative z-10 mt-6 flex w-full max-w-4xl items-center rounded-full border-[3px] border-black bg-white px-4 py-2 shadow-md">
             <input
               type="search"
@@ -104,7 +103,7 @@ async function ShopContent({
               defaultValue={toArray(params.q)[0] ?? ""}
               placeholder="EKSPLORE RASA MANGGA DI BERBAGAI DAERAH"
               aria-label="Cari mangga"
-              className="min-w-0 w-full flex-1 bg-transparent text-[10px] md:text-sm uppercase tracking-wide text-stone-700 outline-none placeholder:text-stone-400"
+              className="min-w-0 w-full flex-1 bg-transparent text-[10px] sm:text-sm uppercase tracking-wide text-stone-700 outline-none placeholder:text-stone-400"
             />
             <button
               type="submit"
@@ -125,7 +124,6 @@ async function ShopContent({
                   Filter
                 </h2>
 
-                {/* FILTER LOKASI */}
                 <fieldset className="mt-3">
                   <legend className="text-xs font-black uppercase text-black">
                     Lokasi
@@ -146,14 +144,13 @@ async function ShopContent({
                       </li>
                     ))}
                   </ul>
-                  <p className="mt-2 text-xs uppercase text-stone-400 cursor-pointer">
+                  <p className="mt-2 text-xs uppercase text-stone-400">
                     Lainnya &gt;
                   </p>
                 </fieldset>
 
                 <hr className="my-2 border-black" />
 
-                {/* FILTER JENIS MANGGA */}
                 <fieldset>
                   <legend className="text-xs font-black uppercase text-black">
                     Jenis Mangga
@@ -174,14 +171,13 @@ async function ShopContent({
                       </li>
                     ))}
                   </ul>
-                  <p className="mt-2 text-xs uppercase text-stone-400 cursor-pointer">
+                  <p className="mt-2 text-xs uppercase text-stone-400">
                     Lainnya &gt;
                   </p>
                 </fieldset>
 
                 <hr className="my-2 border-black" />
 
-                {/* FILTER HARGA */}
                 <fieldset>
                   <legend className="text-xs font-black uppercase text-black">
                     Harga
@@ -259,7 +255,6 @@ async function ShopContent({
                   ))}
                 </div>
 
-                {/* SCROLLBAR DEKORATIF (Hanya tampil di desktop) */}
                 <div
                   aria-hidden="true"
                   className="hidden h-[75vh] w-3 shrink-0 rounded-full bg-[#D48A00] lg:block"
@@ -272,7 +267,6 @@ async function ShopContent({
         </form>
       </section>
 
-      {/* CUSTOM SCROLLBAR */}
       <style>{`
         .mango-scroll {
           scrollbar-width: thin;

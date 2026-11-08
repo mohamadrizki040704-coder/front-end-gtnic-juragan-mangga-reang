@@ -110,11 +110,8 @@ export default function Navbar() {
   const displayName = profile?.namaLengkap ?? "Akun";
   const unreadCount = useUnreadCount();
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State untuk menu HP
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  /* =========================================
-     HANDLE LOGOUT
-  ========================================= */
   const handleLogout = () => {
     logout();
     setAccountMenuOpen(false);
@@ -122,7 +119,8 @@ export default function Navbar() {
   };
 
   return (
-    <header className={`${styles.header} relative z-50`}>
+    <header className={`${styles.header} relative z-[100]`}>
+      
       {/* NAVIGATION PLATE */}
       <svg
         className={styles.navPlate}
@@ -137,8 +135,8 @@ export default function Navbar() {
         />
       </svg>
 
-      {/* TAMPILAN DESKTOP (disembunyikan di HP dengan hidden md:flex) */}
-      <nav className={`${styles.primaryNav} hidden md:flex`} aria-label="Navigasi utama">
+      {/* TAMPILAN DESKTOP: Dipaksa hilang di HP dengan max-md:!hidden */}
+      <nav className={`${styles.primaryNav} max-md:!hidden`} aria-label="Navigasi utama">
         {navigation.map((item) => (
           <Link key={item.label} href={item.href} className={styles.navLink}>
             <span className={styles.navIcon}>{item.icon}</span>
@@ -166,8 +164,8 @@ export default function Navbar() {
         ))}
       </nav>
 
-      {/* ACCOUNT AREA DESKTOP */}
-      <div className={`${styles.accountArea} hidden md:flex`}>
+      {/* ACCOUNT AREA DESKTOP: Dipaksa hilang di HP dengan max-md:!hidden */}
+      <div className={`${styles.accountArea} max-md:!hidden`}>
         {!isLoggedIn && (
           <div className={styles.accountLinks}>
             <LoginTrigger className={styles.loginLink}>LOGIN</LoginTrigger>
@@ -181,14 +179,14 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setAccountMenuOpen((previous) => !previous)}
-              className="flex max-w-85 items-center gap-3 text-black transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+              className="flex max-w-85 items-center gap-3 text-black transition hover:scale-[1.02] focus-visible:outline-none"
             >
               <span className="shrink-0 text-black"><UserIcon /></span>
               <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">{displayName}</span>
             </button>
 
             {accountMenuOpen && (
-              <div className="absolute right-0 top-full mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
+              <div className="absolute right-0 top-full mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-xl">
                 <div className="border-b border-orange-100 bg-orange-50 px-5 py-4">
                   <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">{displayName}</p>
                 </div>
@@ -210,20 +208,17 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* TAMPILAN MOBILE (Tombol Hamburger Menu) */}
-      <div className="flex md:hidden absolute right-4 top-2 z-50">
-        <button 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="text-black p-2 text-2xl"
-          aria-label="Toggle Menu"
-        >
-          {mobileMenuOpen ? "✖" : "☰"}
-        </button>
-      </div>
+      {/* TAMPILAN MOBILE (Tombol Hamburger & Menu) */}
+      <button 
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className="md:hidden absolute right-6 top-3 z-50 text-black text-3xl font-bold p-1"
+        aria-label="Toggle Menu"
+      >
+        {mobileMenuOpen ? "✖" : "☰"}
+      </button>
 
-      {/* DROPDOWN MENU MOBILE */}
       {mobileMenuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-lg border-t border-orange-200 flex flex-col p-4 gap-4 md:hidden">
+        <div className="absolute top-[60px] left-0 w-full bg-white shadow-2xl border-t-2 border-orange-200 flex flex-col p-5 gap-5 md:hidden z-40">
           {navigation.map((item) => (
             <Link 
               key={item.label} 
@@ -231,14 +226,13 @@ export default function Navbar() {
               className="flex items-center gap-3 text-sm font-bold text-black uppercase"
               onClick={() => setMobileMenuOpen(false)}
             >
-              <span className="text-xl">{item.icon}</span>
+              <span className="text-2xl">{item.icon}</span>
               {item.label}
             </Link>
           ))}
 
           <hr className="border-orange-100" />
 
-          {/* Area Akun di Mobile */}
           {!isLoggedIn ? (
             <div className="flex gap-4">
               <LoginTrigger className="font-bold text-black uppercase">LOGIN</LoginTrigger>
@@ -254,7 +248,7 @@ export default function Navbar() {
           <hr className="border-orange-100" />
 
           <Link href="/keranjang" className="flex items-center gap-3 text-sm font-bold text-[#6b3b00] uppercase" onClick={() => setMobileMenuOpen(false)}>
-            <span className="text-xl">{CartIcon}</span> KERANJANG
+            <span className="text-2xl">{CartIcon}</span> KERANJANG
           </Link>
         </div>
       )}
