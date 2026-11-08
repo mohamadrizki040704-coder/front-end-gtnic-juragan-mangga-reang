@@ -62,7 +62,7 @@ export default function HomePage() {
           width={388}
           height={388}
           priority
-          className={cx(styles.sideMangoLeft, anim.spinLeft)}
+          className={cx(cx(styles.sideMangoLeft, "hx-deco"), anim.spinLeft)}
         />
 
         {/* Mangga dekorasi di sisi kanan */}
@@ -72,23 +72,23 @@ export default function HomePage() {
           aria-hidden="true"
           width={388}
           height={388}
-          className={cx(styles.sideMangoRight, anim.spinRight)}
+          className={cx(cx(styles.sideMangoRight, "hx-deco"), anim.spinRight)}
         />
 
         {/* Judul sambutan */}
-        <div className={`flex flex-col text-white mt-32 md:mt-0 ${styles.welcomeMobile}`}>
+        <div className={`flex flex-col text-white mt-32 md:mt-0 ${styles.welcomeMobile} hx-welcome`}>
   <p>HALLO.....</p>
         <h1>SELAMAT DATANG</h1>
 </div>
 
         {/* Kartu oranye di belakang gambar mangga */}
         <div
-          className={cx(styles.orangeCard, anim.cardIn)}
+          className={cx(cx(styles.orangeCard, "hx-orange"), anim.cardIn)}
           aria-hidden="true"
         />
 
         {/* Panel putih judul brand */}
-        <div className={cx(styles.whitePanel, anim.panelIn)}>
+        <div className={cx(cx(styles.whitePanel, "hx-panel"), anim.panelIn)}>
           <p className={cx(styles.brandName, anim.nameIn)}>JURAGAN MANGGA</p>
 
           <h2 className={cx(styles.brandReang, anim.reangIn)}>REANG</h2>
@@ -119,7 +119,7 @@ export default function HomePage() {
           aria-hidden="true"
           width={388}
           height={388}
-          className={cx(styles.backMangoTop, anim.mangoBackTop)}
+          className={cx(cx(styles.backMangoTop, "hx-deco"), anim.mangoBackTop)}
         />
 
         <Image
@@ -128,7 +128,7 @@ export default function HomePage() {
           aria-hidden="true"
           width={388}
           height={388}
-          className={cx(styles.backMangoBottom, anim.mangoBackBottom)}
+          className={cx(cx(styles.backMangoBottom, "hx-deco"), anim.mangoBackBottom)}
         />
 
         {/* Gambar utama mangga Gedong Gincu */}
@@ -138,7 +138,7 @@ export default function HomePage() {
           width={512}
           height={512}
           priority
-          className={cx(styles.heroMango, anim.mangoMain)}
+          className={cx(cx(styles.heroMango, "hx-mango"), anim.mangoMain)}
         />
 
         {/* Bagian bawah landing page */}
@@ -155,7 +155,7 @@ export default function HomePage() {
       <section
         id="alur"
         aria-label="Alur pemesanan"
-        className={`${montserrat.className} relative min-h-screen w-full overflow-hidden ${styles.alurSection}`}
+        className={`${montserrat.className} relative min-h-screen w-full overflow-hidden ${styles.alurSection} hx-alur`}
         style={{
           background:
             "linear-gradient(to bottom, #FFA000 0%, #FFA800 28%, #FFF4DC 52%, #FFFFFF 62%, #FFFFFF 100%)",
@@ -169,7 +169,7 @@ export default function HomePage() {
           data-fx="right"
           className={cx(
             anim.fx,
-            anim.alurMango, styles.alurMangoImg,
+            anim.alurMango, cx(styles.alurMangoImg, "hx-alur-mango"),
             "pointer-events-none absolute right-0 top-0 z-20 h-auto w-[40vw] max-w-[620px] object-contain"
           )}
           style={{
@@ -178,13 +178,13 @@ export default function HomePage() {
           }}
         />
 
-        <div className={`relative z-10 pl-[1.5vw] pt-[3vw] ${styles.alurInner}`}>
+        <div className={`relative z-10 pl-[1.5vw] pt-[3vw] ${styles.alurInner} hx-alur-inner`}>
           {/* ===== Header: Judul ===== */}
-          <div className={`flex items-center ${styles.alurTitleRow}`}>
+          <div className={`flex items-center ${styles.alurTitleRow} hx-alur-row`}>
             {/* Kiri: JURAGAN MANGGA + REANG (SVG textLength → selalu pas lebar) */}
             <div
               data-fx="left"
-              className={cx(anim.fx, "w-[34.5vw] shrink-0", styles.alurLogo)}
+              className={cx(anim.fx, "w-[34.5vw] shrink-0", cx(styles.alurLogo, "hx-alur-logo"))}
             >
               <svg
                 viewBox="0 0 500 200"
@@ -244,14 +244,14 @@ export default function HomePage() {
             {/* Garis pemisah vertikal */}
             <div
               data-fx="fade"
-              className={cx(anim.fx, "mx-[0.5vw] h-[7.4vw] w-[0.22vw] bg-black", styles.alurDivider)}
+              className={cx(anim.fx, "mx-[0.5vw] h-[7.4vw] w-[0.22vw] bg-black", cx(styles.alurDivider, "hx-alur-div"))}
               style={d(150)}
             />
 
             {/* ALUR */}
             <h2
               data-fx="right"
-              className={cx(anim.fx, "font-black uppercase text-black", styles.alurTitle)}
+              className={cx(anim.fx, "font-black uppercase text-black", cx(styles.alurTitle, "hx-alur-title"))}
               style={{
                 ...d(150),
                 fontSize: "10.4vw",
@@ -269,7 +269,7 @@ export default function HomePage() {
             data-fx="up"
             className={cx(
               anim.fx,
-              "mt-[1.3vw] w-[68vw] text-center font-semibold uppercase text-black", styles.alurSub
+              "mt-[1.3vw] w-[68vw] text-center font-semibold uppercase text-black", cx(styles.alurSub, "hx-alur-sub")
             )}
             style={{
               ...d(100),
@@ -287,7 +287,7 @@ export default function HomePage() {
             data-fx="up"
             className={cx(
               anim.fx,
-              "mt-[1.8vw] font-extrabold uppercase text-black", styles.alurAsk
+              "mt-[1.8vw] font-extrabold uppercase text-black", cx(styles.alurAsk, "hx-alur-ask")
             )}
             style={{
               ...d(100),
@@ -305,7 +305,7 @@ export default function HomePage() {
           {/* ===== Kartu putih alur ===== */}
           <div
             data-fx="up"
-            className={cx(anim.fx, "mt-[1.4vw] w-[93%] bg-white", styles.alurCard)}
+            className={cx(anim.fx, "mt-[1.4vw] w-[93%] bg-white", cx(styles.alurCard, "hx-alur-card"))}
             style={{
               borderRadius: "3vw",
               padding: "2.8vw 1.8vw 4.5vw 1.8vw",
@@ -314,7 +314,7 @@ export default function HomePage() {
             }}
           >
             <ol
-              className={`font-semibold text-black ${styles.alurList}`}
+              className={`font-semibold text-black ${styles.alurList} hx-alur-list`}
               style={{
                 fontSize: "1.4vw",
                 letterSpacing: "0.22em",
@@ -325,7 +325,7 @@ export default function HomePage() {
                 <li
                   key={index}
                   data-fx="left"
-                  className={cx(anim.fx, "flex items-start", styles.alurItem)}
+                  className={cx(anim.fx, "flex items-start", cx(styles.alurItem, "hx-alur-item"))}
                   style={d(index * 80)}
                 >
                   <span className="mr-[0.4vw] shrink-0 tracking-normal">
