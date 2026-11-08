@@ -105,24 +105,30 @@ export default function Navbar() {
   };
 
   return (
-    <header className={`${styles.header} relative z-[100] max-md:bg-[#fffdf8] max-md:h-[60px] max-md:w-full max-md:shadow-sm`}>
+    <header className={`${styles.header} relative z-[100] bg-[#fffdf8] md:bg-transparent h-[60px] md:h-auto w-full shadow-sm md:shadow-none`}>
       
-      {/* NAVIGATION PLATE (Bentuk Lengkung Desktop) - DISAMAR DI MOBILE */}
-      <svg
-        className={`${styles.navPlate} max-md:!hidden`}
-        viewBox="0 0 700 46"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path
-          d="M0 0C60 1 72 8 76 20L83 37Q87 46 100 46H600Q613 46 617 37L624 20C628 8 640 1 700 0Z"
-          fill="#fffdf8"
-        />
-      </svg>
+      {/* 
+        BUNGKUS SVG DENGAN "hidden md:block" 
+        Ini adalah kunci utama agar si lengkungan putih 100% HILANG di layar HP 
+        tapi tetap muncul normal di Desktop.
+      */}
+      <div className="hidden md:block">
+        <svg
+          className={styles.navPlate}
+          viewBox="0 0 700 46"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M0 0C60 1 72 8 76 20L83 37Q87 46 100 46H600Q613 46 617 37L624 20C628 8 640 1 700 0Z"
+            fill="#fffdf8"
+          />
+        </svg>
+      </div>
 
       {/* TAMPILAN DESKTOP */}
-      <nav className={`${styles.primaryNav} max-md:!hidden`} aria-label="Navigasi utama">
+      <nav className={`${styles.primaryNav} hidden md:flex`} aria-label="Navigasi utama">
         {navigation.map((item) => (
           <Link key={item.label} href={item.href} className={styles.navLink}>
             <span className={styles.navIcon}>{item.icon}</span>
@@ -151,7 +157,7 @@ export default function Navbar() {
       </nav>
 
       {/* ACCOUNT AREA DESKTOP */}
-      <div className={`${styles.accountArea} max-md:!hidden`}>
+      <div className={`${styles.accountArea} hidden md:flex`}>
         {!isLoggedIn && (
           <div className={styles.accountLinks}>
             <LoginTrigger className={styles.loginLink}>LOGIN</LoginTrigger>
@@ -195,10 +201,10 @@ export default function Navbar() {
       </div>
 
       {/* TAMPILAN MOBILE (Tombol Hamburger & Menu) */}
-      <div className="md:hidden flex w-full h-full items-center justify-end px-4">
+      <div className="md:hidden absolute top-0 left-0 w-full h-[60px] flex items-center justify-end px-4 z-50">
         <button 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="text-black text-3xl font-bold p-1 z-50"
+          className="text-black text-3xl font-bold p-1"
           aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? "✖" : "☰"}
