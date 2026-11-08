@@ -14,7 +14,7 @@ const montserrat = Montserrat({
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["500", "600"],
-});
+})
 
 const steps = [
   "Buka website Juragan Mangga.",
@@ -75,15 +75,13 @@ export default function HomePage() {
           className={cx(styles.sideMangoRight, anim.spinRight)}
         />
 
-        {/* 
-          Judul sambutan
-          PERBAIKAN: Menambahkan mt-32 khusus untuk mobile agar turun,
-          sedangkan di desktop kembali netral (md:mt-0). 
-          Saya juga menambahkan z-10 agar tidak tertimpa elemen lain.
-        */}
-        <div className="relative z-10 flex flex-col text-white mt-40 md:mt-0 items-center justify-center w-full">
-          <p className="text-xl md:text-2xl font-bold tracking-widest drop-shadow-md">HALLO.....</p>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black drop-shadow-lg text-center mt-2">SELAMAT DATANG</h1>
+        {/* Judul sambutan */}
+        <div className={cx(styles.welcome, anim.welcomeIn)}>
+          <h1>
+            HALLO!!!!!
+            <br />
+            SELAMAT DATANG
+          </h1>
         </div>
 
         {/* Kartu oranye di belakang gambar mangga */}
