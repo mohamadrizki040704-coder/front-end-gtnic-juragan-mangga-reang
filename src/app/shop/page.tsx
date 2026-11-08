@@ -62,9 +62,11 @@ async function ShopContent({
     <main className="min-h-screen overflow-hidden bg-white w-full">
       <section className="mx-auto w-full max-w-7xl px-4 pt-6 sm:px-8">
         
-        {/* HEADER DIPERBAIKI: flex-col murni di mobile agar tidak numpuk */}
+        {/* HEADER DIPERBAIKI */}
         <header className="relative flex flex-col md:flex-row w-full items-center md:items-start gap-3 pt-6 md:pt-14 pb-4 text-center md:text-left">
-          <div className="flex flex-col items-center md:items-start w-fit shrink-0">
+          
+          {/* DITAMBAHKAN "hidden md:flex" AGAR HILANG DI HP */}
+          <div className="hidden md:flex flex-col items-center md:items-start w-fit shrink-0">
             <p className="font-serif text-2xl md:text-4xl lg:text-5xl uppercase tracking-wider text-black">
               Juragan Mangga
             </p>
@@ -80,6 +82,7 @@ async function ShopContent({
 
           <div className="hidden md:block h-20 w-0.5 shrink-0 bg-black sm:h-28" />
 
+          {/* TEKS SHOP TETAP TAMPIL DI HP & DESKTOP */}
           <h1 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black uppercase leading-none text-black drop-shadow-[0_12px_14px_rgba(0,0,0,0.25)]">
             Shop
           </h1>
@@ -125,88 +128,47 @@ async function ShopContent({
                 </h2>
 
                 <fieldset className="mt-3">
-                  <legend className="text-xs font-black uppercase text-black">
-                    Lokasi
-                  </legend>
+                  <legend className="text-xs font-black uppercase text-black">Lokasi</legend>
                   <ul className="mt-1 space-y-0.5">
                     {lokasiOptions.map((l) => (
                       <li key={l}>
                         <label className="flex cursor-pointer items-center gap-2 text-xs uppercase tracking-wide text-stone-800">
-                          <input
-                            type="checkbox"
-                            name="lokasi"
-                            value={l}
-                            defaultChecked={lokasi.includes(l)}
-                            className="size-3 accent-black"
-                          />
+                          <input type="checkbox" name="lokasi" value={l} defaultChecked={lokasi.includes(l)} className="size-3 accent-black" />
                           {l}
                         </label>
                       </li>
                     ))}
                   </ul>
-                  <p className="mt-2 text-xs uppercase text-stone-400">
-                    Lainnya &gt;
-                  </p>
+                  <p className="mt-2 text-xs uppercase text-stone-400">Lainnya &gt;</p>
                 </fieldset>
 
                 <hr className="my-2 border-black" />
 
                 <fieldset>
-                  <legend className="text-xs font-black uppercase text-black">
-                    Jenis Mangga
-                  </legend>
+                  <legend className="text-xs font-black uppercase text-black">Jenis Mangga</legend>
                   <ul className="mt-1 space-y-0.5">
                     {jenisOptions.map((j) => (
                       <li key={j}>
                         <label className="flex cursor-pointer items-center gap-2 text-xs uppercase tracking-wide text-stone-800">
-                          <input
-                            type="checkbox"
-                            name="jenis"
-                            value={j}
-                            defaultChecked={jenis.includes(j)}
-                            className="size-3 accent-black"
-                          />
+                          <input type="checkbox" name="jenis" value={j} defaultChecked={jenis.includes(j)} className="size-3 accent-black" />
                           {j}
                         </label>
                       </li>
                     ))}
                   </ul>
-                  <p className="mt-2 text-xs uppercase text-stone-400">
-                    Lainnya &gt;
-                  </p>
+                  <p className="mt-2 text-xs uppercase text-stone-400">Lainnya &gt;</p>
                 </fieldset>
 
                 <hr className="my-2 border-black" />
 
                 <fieldset>
-                  <legend className="text-xs font-black uppercase text-black">
-                    Harga
-                  </legend>
+                  <legend className="text-xs font-black uppercase text-black">Harga</legend>
                   <div className="mt-2 flex items-center gap-1 text-xs">
-                    <input
-                      type="number"
-                      name="min"
-                      min={0}
-                      placeholder="MIN"
-                      defaultValue={toArray(params.min)[0] ?? ""}
-                      aria-label="Harga minimum"
-                      className="w-full min-w-0 rounded-full bg-white px-2 py-1 text-[10px] shadow-md outline-none placeholder:text-stone-300"
-                    />
+                    <input type="number" name="min" min={0} placeholder="MIN" defaultValue={toArray(params.min)[0] ?? ""} className="w-full min-w-0 rounded-full bg-white px-2 py-1 text-[10px] shadow-md outline-none placeholder:text-stone-300" />
                     <span>&gt;</span>
-                    <input
-                      type="number"
-                      name="max"
-                      min={0}
-                      placeholder="MAX"
-                      defaultValue={toArray(params.max)[0] ?? ""}
-                      aria-label="Harga maksimum"
-                      className="w-full min-w-0 rounded-full bg-white px-2 py-1 text-[10px] shadow-md outline-none placeholder:text-stone-300"
-                    />
+                    <input type="number" name="max" min={0} placeholder="MAX" defaultValue={toArray(params.max)[0] ?? ""} className="w-full min-w-0 rounded-full bg-white px-2 py-1 text-[10px] shadow-md outline-none placeholder:text-stone-300" />
                   </div>
-                  <button
-                    type="submit"
-                    className="mx-auto mt-2 block rounded-full bg-[#FFA800] px-5 py-1 text-[10px] font-bold uppercase text-black shadow-md transition hover:brightness-95"
-                  >
+                  <button type="submit" className="mx-auto mt-2 block rounded-full bg-[#FFA800] px-5 py-1 text-[10px] font-bold uppercase text-black shadow-md transition hover:brightness-95">
                     Apply
                   </button>
                 </fieldset>
@@ -217,48 +179,25 @@ async function ShopContent({
               <div className="flex min-w-0 flex-1 gap-3 w-full">
                 <div className="mango-scroll grid max-h-[75vh] min-w-0 flex-1 grid-cols-1 content-start gap-5 overflow-y-auto pb-6 pr-2 sm:grid-cols-2 xl:grid-cols-4">
                   {filtered.length === 0 && (
-                    <p className="col-span-full py-16 text-center font-bold text-black">
-                      Mangga tidak ditemukan. Coba ubah kata kunci atau filter.
-                    </p>
+                    <p className="col-span-full py-16 text-center font-bold text-black">Mangga tidak ditemukan. Coba ubah kata kunci atau filter.</p>
                   )}
 
                   {filtered.map((product) => (
-                    <Link
-                      key={product.slug}
-                      href={`/shop/${product.slug}`}
-                      className="block rounded-[2.2rem] bg-[#F5A000] p-2 shadow-[inset_0_-4px_8px_rgba(0,0,0,0.18),0_4px_8px_rgba(0,0,0,0.12)] transition hover:-translate-y-1"
-                    >
+                    <Link key={product.slug} href={`/shop/${product.slug}`} className="block rounded-[2.2rem] bg-[#F5A000] p-2 shadow-[inset_0_-4px_8px_rgba(0,0,0,0.18),0_4px_8px_rgba(0,0,0,0.12)] transition hover:-translate-y-1">
                       <div className="relative aspect-[4/3] overflow-hidden rounded-[1.8rem] bg-white">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fill
-                          sizes="(min-width: 1280px) 20vw, 50vw"
-                          className="object-contain p-2"
-                        />
+                        <Image src={product.image} alt={product.name} fill sizes="(min-width: 1280px) 20vw, 50vw" className="object-contain p-2" />
                       </div>
                       <div className="px-2 pb-4 pt-3">
-                        <h3 className="text-xs font-black uppercase tracking-wide text-black">
-                          {product.name}
-                        </h3>
-                        <p className="mt-0.5 font-mono text-xl font-black text-black">
-                          {formatRupiah(product.price)}
-                        </p>
-                        <p className="mt-0.5 text-sm font-medium uppercase leading-tight tracking-wide text-white">
-                          {product.supplier}
-                        </p>
-                        <p className="text-sm font-medium uppercase leading-tight tracking-wide text-white">
-                          {product.address}
-                        </p>
+                        <h3 className="text-xs font-black uppercase tracking-wide text-black">{product.name}</h3>
+                        <p className="mt-0.5 font-mono text-xl font-black text-black">{formatRupiah(product.price)}</p>
+                        <p className="mt-0.5 text-sm font-medium uppercase leading-tight tracking-wide text-white">{product.supplier}</p>
+                        <p className="text-sm font-medium uppercase leading-tight tracking-wide text-white">{product.address}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
 
-                <div
-                  aria-hidden="true"
-                  className="hidden h-[75vh] w-3 shrink-0 rounded-full bg-[#D48A00] lg:block"
-                >
+                <div aria-hidden="true" className="hidden h-[75vh] w-3 shrink-0 rounded-full bg-[#D48A00] lg:block">
                   <div className="m-0.5 h-24 rounded-full bg-[#FFC21A]" />
                 </div>
               </div>
