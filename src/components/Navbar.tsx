@@ -9,7 +9,7 @@ import styles from "./Navbar.module.css";
 
 import { LoginTrigger } from "./loginModal";
 import { SignupTrigger } from "./signupModal";
-import { useAuth } from "@/lib/auth";
+import { useAuth, useProfile } from "@/lib/auth";
 import { useUnreadCount } from "@/lib/notifications";
 
 /* =========================================
@@ -121,7 +121,9 @@ const navigation: {
 ========================================= */
 
 export default function Navbar() {
-  const { role, isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
+  const profile = useProfile();
+  const displayName = profile?.namaLengkap ?? "Akun";
   const unreadCount = useUnreadCount();
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
@@ -218,10 +220,7 @@ export default function Navbar() {
               <span className="shrink-0 text-black">
                 <UserIcon />
               </span>
-              <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">
-
-                Akun
-              </span>
+              <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">{displayName}</span>
             </button>
 
             {/* ACCOUNT DROPDOWN */}
@@ -229,12 +228,7 @@ export default function Navbar() {
               <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
                 {/* ACCOUNT INFORMATION */}
                 <div className="border-b border-orange-100 bg-orange-50 px-5 py-4">
-                  <p className="text-xs font-medium uppercase tracking-widest text-orange-700">
-                    Login sebagai {role ?? ""}
-                  </p>
-                  <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">
-                    Akun
-                  </p>
+                  <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">{displayName}</p>
                 </div>
 
                 {/* LOGOUT BUTTON */}

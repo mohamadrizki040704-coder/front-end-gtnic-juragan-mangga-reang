@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/+$/, "");
 
@@ -171,4 +171,45 @@ export async function authFetch(path: string, init: RequestInit = {}): Promise<R
   if (response.status === 401) clearToken();
 
   return response;
+}
+
+/* =========================================
+   PROFIL PENGGUNA (nama, email, role) dari GET /api/auth/me
+========================================= */
+
+export type Profile = {
+  id: number;
+  email: string;
+  namaLengkap: string;
+  role: string;
+  namaPerusahaan: string | null;
+};
+
+export function useProfile(): Profile | null {
+  const { token } = useAuth();
+  const [state, setState] = useState<{ token: string; profile: Profile } | null>(null);
+
+  useEffect(() => {
+    if (!token) return;
+
+    let active = true;
+
+    (async () => {
+      try {
+        const res = await authFetch("/api/auth/me");
+        if (!res.ok) return;
+        const profile = (await res.json()) as Profile;
+        if (active) setState({ token, profile });
+      } catch {
+        /* abaikan: nama tetap memakai teks cadangan */
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [token]);
+
+  // hanya dipakai jika milik token yang sedang aktif (aman saat ganti akun)
+  return token && state?.token === token ? state.profile : null;
 }
