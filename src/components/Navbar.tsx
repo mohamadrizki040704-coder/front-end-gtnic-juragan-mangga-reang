@@ -10,6 +10,7 @@ import styles from "./Navbar.module.css";
 import { LoginTrigger } from "./loginModal";
 import { SignupTrigger } from "./signupModal";
 import { useAuth } from "@/lib/auth";
+import { useUnreadCount } from "@/lib/notifications";
 
 /* =========================================
    SVG PROPERTIES
@@ -121,6 +122,7 @@ const navigation: {
 
 export default function Navbar() {
   const { role, isLoggedIn, logout } = useAuth();
+  const unreadCount = useUnreadCount();
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
   /* =========================================
@@ -157,6 +159,25 @@ export default function Navbar() {
               {item.icon}
             </span>
             <span>{item.label}</span>
+            {item.href === "/notification" && unreadCount > 0 && (
+              <span
+                aria-label={`${unreadCount} notifikasi belum dibaca`}
+                style={{
+                  marginLeft: 6,
+                  minWidth: 18,
+                  padding: "0 6px",
+                  borderRadius: 999,
+                  background: "#dc2626",
+                  color: "#fff",
+                  fontSize: "0.7em",
+                  fontWeight: 700,
+                  lineHeight: "18px",
+                  textAlign: "center",
+                }}
+              >
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
           </Link>
         ))}
       </nav>

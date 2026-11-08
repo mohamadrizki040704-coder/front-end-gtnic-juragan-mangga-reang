@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import styles from "./notification.module.css";
@@ -11,19 +11,46 @@ import {
   markAllNotificationsRead,
   type NotificationItem,
 } from "@/lib/notifications";
+import { useAuth } from "@/lib/auth";
 
 export default function NotificationPage() {
+  const { isLoggedIn } = useAuth();
+
   const [notifications, setNotifications] = useState<
     NotificationItem[]
-  >(() => getNotifications());
+  >([]);
+
+  // Muat saat halaman dibuka, lalu segarkan tiap 30 detik selama login
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setNotifications(await getNotifications());
+      } catch {
+        /* gagal memuat: pertahankan daftar yang sudah tampil */
+      }
+    };
+
+    load();
+
+    if (!isLoggedIn) return;
+
+    const timer = setInterval(load, 30000);
+    return () => clearInterval(timer);
+  }, [isLoggedIn]);
 
   const allRead =
     notifications.length > 0 &&
     notifications.every((item) => item.read);
 
-  const handleMarkAllRead = () => {
-    const updatedNotifications = markAllNotificationsRead();
-    setNotifications(updatedNotifications);
+  const handleMarkAllRead = async () => {
+    try {
+      await markAllNotificationsRead();
+      setNotifications((list) =>
+        list.map((item) => ({ ...item, read: true }))
+      );
+    } catch {
+      /* gagal: biarkan status apa adanya */
+    }
   };
 
   const formatDate = (date: string) => {
