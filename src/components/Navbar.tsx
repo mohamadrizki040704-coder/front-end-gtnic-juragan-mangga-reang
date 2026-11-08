@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-// Memanggil CSS Module kamu yang tidak diubah sama sekali
+// Memanggil CSS Module
 import styles from "./Navbar.module.css";
 
 import { LoginTrigger } from "./loginModal";
@@ -15,7 +15,6 @@ import { useUnreadCount } from "@/lib/notifications";
 /* =========================================
    SVG PROPERTIES
 ========================================= */
-
 const svgProps = {
   viewBox: "0 0 24 24",
   width: "1em",
@@ -27,7 +26,6 @@ const svgProps = {
 /* =========================================
    NAVIGATION ICONS
 ========================================= */
-
 const BellIcon = (
   <svg {...svgProps} fill="#ff9c00">
     <path d="M12 2a6 6 0 0 0-6 6v4l-2 3v1h16v-1l-2-3V8a6 6 0 0 0-6-6Zm0 20a2.5 2.5 0 0 0 2.4-2H9.6A2.5 2.5 0 0 0 12 22Z" />
@@ -66,10 +64,6 @@ const CartIcon = (
   </svg>
 );
 
-/* =========================================
-   USER ICON
-========================================= */
-
 function UserIcon() {
   return (
     <svg
@@ -85,10 +79,6 @@ function UserIcon() {
   );
 }
 
-/* =========================================
-   NAVIGATION DATA
-========================================= */
-
 const navigation: {
   href: string;
   label: string;
@@ -99,10 +89,6 @@ const navigation: {
   { href: "/shop", label: "Shop", icon: ShopIcon },
   { href: "/#contact", label: "Contact", icon: PencilIcon },
 ];
-
-/* =========================================
-   NAVBAR COMPONENT
-========================================= */
 
 export default function Navbar() {
   const { isLoggedIn, logout } = useAuth();
@@ -119,11 +105,11 @@ export default function Navbar() {
   };
 
   return (
-    <header className={`${styles.header} relative z-[100]`}>
+    <header className={`${styles.header} relative z-[100] max-md:bg-[#fffdf8] max-md:h-[60px] max-md:w-full max-md:shadow-sm`}>
       
-      {/* NAVIGATION PLATE */}
+      {/* NAVIGATION PLATE (Bentuk Lengkung Desktop) - DISAMAR DI MOBILE */}
       <svg
-        className={styles.navPlate}
+        className={`${styles.navPlate} max-md:!hidden`}
         viewBox="0 0 700 46"
         preserveAspectRatio="none"
         aria-hidden="true"
@@ -135,7 +121,7 @@ export default function Navbar() {
         />
       </svg>
 
-      {/* TAMPILAN DESKTOP: Dipaksa hilang di HP dengan max-md:!hidden */}
+      {/* TAMPILAN DESKTOP */}
       <nav className={`${styles.primaryNav} max-md:!hidden`} aria-label="Navigasi utama">
         {navigation.map((item) => (
           <Link key={item.label} href={item.href} className={styles.navLink}>
@@ -164,7 +150,7 @@ export default function Navbar() {
         ))}
       </nav>
 
-      {/* ACCOUNT AREA DESKTOP: Dipaksa hilang di HP dengan max-md:!hidden */}
+      {/* ACCOUNT AREA DESKTOP */}
       <div className={`${styles.accountArea} max-md:!hidden`}>
         {!isLoggedIn && (
           <div className={styles.accountLinks}>
@@ -209,13 +195,15 @@ export default function Navbar() {
       </div>
 
       {/* TAMPILAN MOBILE (Tombol Hamburger & Menu) */}
-      <button 
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="md:hidden absolute right-6 top-3 z-50 text-black text-3xl font-bold p-1"
-        aria-label="Toggle Menu"
-      >
-        {mobileMenuOpen ? "✖" : "☰"}
-      </button>
+      <div className="md:hidden flex w-full h-full items-center justify-end px-4">
+        <button 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="text-black text-3xl font-bold p-1 z-50"
+          aria-label="Toggle Menu"
+        >
+          {mobileMenuOpen ? "✖" : "☰"}
+        </button>
+      </div>
 
       {mobileMenuOpen && (
         <div className="absolute top-[60px] left-0 w-full bg-white shadow-2xl border-t-2 border-orange-200 flex flex-col p-5 gap-5 md:hidden z-40">
