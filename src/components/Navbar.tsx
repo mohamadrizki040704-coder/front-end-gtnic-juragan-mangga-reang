@@ -94,26 +94,10 @@ const navigation: {
   label: string;
   icon: ReactNode;
 }[] = [
-  {
-    href: "/notification",
-    label: "Notifikasi",
-    icon: BellIcon,
-  },
-  {
-    href: "/#alur",
-    label: "Alur",
-    icon: HelpIcon,
-  },
-  {
-    href: "/shop",
-    label: "Shop",
-    icon: ShopIcon,
-  },
-  {
-    href: "/#contact",
-    label: "Contact",
-    icon: PencilIcon,
-  },
+  { href: "/notification", label: "Notifikasi", icon: BellIcon },
+  { href: "/#alur", label: "Alur", icon: HelpIcon },
+  { href: "/shop", label: "Shop", icon: ShopIcon },
+  { href: "/#contact", label: "Contact", icon: PencilIcon },
 ];
 
 /* =========================================
@@ -126,6 +110,7 @@ export default function Navbar() {
   const displayName = profile?.namaLengkap ?? "Akun";
   const unreadCount = useUnreadCount();
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State untuk menu HP
 
   /* =========================================
      HANDLE LOGOUT
@@ -133,11 +118,11 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
     setAccountMenuOpen(false);
+    setMobileMenuOpen(false);
   };
 
   return (
-    <header className={styles.header}>
-
+    <header className={`${styles.header} relative z-50`}>
       {/* NAVIGATION PLATE */}
       <svg
         className={styles.navPlate}
@@ -152,14 +137,11 @@ export default function Navbar() {
         />
       </svg>
 
-      {/* PRIMARY NAVIGATION */}
-      <nav className={styles.primaryNav} aria-label="Navigasi utama">
+      {/* TAMPILAN DESKTOP (disembunyikan di HP dengan hidden md:flex) */}
+      <nav className={`${styles.primaryNav} hidden md:flex`} aria-label="Navigasi utama">
         {navigation.map((item) => (
           <Link key={item.label} href={item.href} className={styles.navLink}>
-            {/* Span pembungkus ini sangat penting untuk animasi transform di CSS-mu */}
-            <span className={styles.navIcon}>
-              {item.icon}
-            </span>
+            <span className={styles.navIcon}>{item.icon}</span>
             <span>{item.label}</span>
             {item.href === "/notification" && unreadCount > 0 && (
               <span
@@ -184,74 +166,37 @@ export default function Navbar() {
         ))}
       </nav>
 
-      {/* =========================================
-         ACCOUNT AREA
-      ========================================= */}
-      <div className={styles.accountArea}>
-
-        {/* BELUM LOGIN */}
+      {/* ACCOUNT AREA DESKTOP */}
+      <div className={`${styles.accountArea} hidden md:flex`}>
         {!isLoggedIn && (
           <div className={styles.accountLinks}>
-            <LoginTrigger className={styles.loginLink}>
-              LOGIN
-            </LoginTrigger>
-
-            <span className={styles.divider} aria-hidden="true">
-              |
-            </span>
-
-            <SignupTrigger className={styles.signupLink}>
-              SIGN UP
-            </SignupTrigger>
+            <LoginTrigger className={styles.loginLink}>LOGIN</LoginTrigger>
+            <span className={styles.divider} aria-hidden="true">|</span>
+            <SignupTrigger className={styles.signupLink}>SIGN UP</SignupTrigger>
           </div>
         )}
 
-        {/* SUDAH LOGIN */}
         {isLoggedIn && (
           <div className="relative pointer-events-auto">
-            {/* USER BUTTON */}
             <button
               type="button"
               onClick={() => setAccountMenuOpen((previous) => !previous)}
-              aria-expanded={accountMenuOpen}
-              aria-haspopup="true"
               className="flex max-w-85 items-center gap-3 text-black transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
             >
-              <span className="shrink-0 text-black">
-                <UserIcon />
-              </span>
+              <span className="shrink-0 text-black"><UserIcon /></span>
               <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">{displayName}</span>
             </button>
 
-            {/* ACCOUNT DROPDOWN */}
             {accountMenuOpen && (
-              <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
-                {/* ACCOUNT INFORMATION */}
+              <div className="absolute right-0 top-full mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
                 <div className="border-b border-orange-100 bg-orange-50 px-5 py-4">
                   <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">{displayName}</p>
                 </div>
-
-                {/* LOGOUT BUTTON */}
                 <button
                   type="button"
                   onClick={handleLogout}
                   className="flex w-full items-center gap-3 px-5 py-4 text-left text-sm font-bold uppercase tracking-wider text-red-600 transition hover:bg-red-50"
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="21"
-                    height="21"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <path d="M16 17l5-5-5-5" />
-                    <path d="M21 12H9" />
-                  </svg>
                   LOGOUT
                 </button>
               </div>
@@ -259,18 +204,60 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* =========================================
-            SHOPPING CART
-        ========================================= */}
         <Link href="/keranjang" className={styles.cartLink}>
-          {/* Span pembungkus icon dan span text agar animasi .cartLink > span dari CSS kamu berjalan sempurna */}
-          <span className={styles.cartIcon}>
-            {CartIcon}
-          </span>
+          <span className={styles.cartIcon}>{CartIcon}</span>
           <span>KERANJANG</span>
         </Link>
-
       </div>
+
+      {/* TAMPILAN MOBILE (Tombol Hamburger Menu) */}
+      <div className="flex md:hidden absolute right-4 top-2 z-50">
+        <button 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="text-black p-2 text-2xl"
+          aria-label="Toggle Menu"
+        >
+          {mobileMenuOpen ? "✖" : "☰"}
+        </button>
+      </div>
+
+      {/* DROPDOWN MENU MOBILE */}
+      {mobileMenuOpen && (
+        <div className="absolute top-16 left-0 w-full bg-white shadow-lg border-t border-orange-200 flex flex-col p-4 gap-4 md:hidden">
+          {navigation.map((item) => (
+            <Link 
+              key={item.label} 
+              href={item.href} 
+              className="flex items-center gap-3 text-sm font-bold text-black uppercase"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <span className="text-xl">{item.icon}</span>
+              {item.label}
+            </Link>
+          ))}
+
+          <hr className="border-orange-100" />
+
+          {/* Area Akun di Mobile */}
+          {!isLoggedIn ? (
+            <div className="flex gap-4">
+              <LoginTrigger className="font-bold text-black uppercase">LOGIN</LoginTrigger>
+              <SignupTrigger className="font-bold text-[#FFA800] uppercase">SIGN UP</SignupTrigger>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+               <p className="font-extrabold uppercase text-black">Halo, {displayName}</p>
+               <button onClick={handleLogout} className="text-left font-bold text-red-600 uppercase">LOGOUT</button>
+            </div>
+          )}
+
+          <hr className="border-orange-100" />
+
+          <Link href="/keranjang" className="flex items-center gap-3 text-sm font-bold text-[#6b3b00] uppercase" onClick={() => setMobileMenuOpen(false)}>
+            <span className="text-xl">{CartIcon}</span> KERANJANG
+          </Link>
+        </div>
+      )}
     </header>
   );
 }

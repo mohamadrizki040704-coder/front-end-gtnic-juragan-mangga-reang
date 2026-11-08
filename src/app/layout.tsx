@@ -18,12 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className="flex min-h-screen flex-col bg-white text-stone-900 antialiased">
+      {/* Tambahan overflow-x-hidden agar halaman tidak bocor ke samping di HP */}
+      <body className="flex min-h-screen flex-col bg-white text-stone-900 antialiased overflow-x-hidden">
         {/* Navbar */}
         <Navbar />
 
         {/* Konten halaman */}
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 w-full max-w-full">{children}</main>
 
         {/* Footer */}
         <Footer />
