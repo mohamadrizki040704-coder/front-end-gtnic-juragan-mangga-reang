@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { products, formatRupiah } from "./products";
+import FilterPanel from "./FilterPanel";
 
 const lokasiOptions = [
   "Indramayu",
@@ -60,6 +61,9 @@ async function ShopContent({
   const min = Number(toArray(params.min)[0]) || 0;
   const max = Number(toArray(params.max)[0]) || Infinity;
 
+  const activeCount =
+    lokasi.length + jenis.length + (min ? 1 : 0) + (max !== Infinity ? 1 : 0);
+
   // FILTER PRODUK
   const filtered = products.filter((p) => {
     const text =
@@ -83,11 +87,11 @@ async function ShopContent({
         {/* HEADER */}
         <header className="relative flex min-h-48 items-center gap-3 pt-28 sm:gap-8 min-[701px]:pt-14 lg:pr-64">
           <div className="w-fit shrink-0">
-            <p className="font-serif text-lg uppercase tracking-wider text-black sm:text-4xl lg:text-5xl">
+            <p className="font-serif text-[length:clamp(0.75rem,3.6vw,1.1rem)] uppercase tracking-wider text-black sm:text-4xl lg:text-5xl">
               Juragan Mangga
             </p>
 
-            <p className="mt-1 flex justify-between text-3xl font-black leading-none text-[#FFA800] sm:text-6xl lg:text-7xl">
+            <p className="mt-1 flex justify-between text-[length:clamp(1.5rem,7vw,2.25rem)] font-black leading-none text-[#FFA800] sm:text-6xl lg:text-7xl">
               {"REANG".split("").map((c, i) => (
                 <span key={i}>{c}</span>
               ))}
@@ -98,7 +102,7 @@ async function ShopContent({
 
           <div className="h-14 w-0.5 shrink-0 bg-black sm:h-28" />
 
-          <h1 className="text-4xl font-black uppercase leading-none text-black drop-shadow-[0_12px_14px_rgba(0,0,0,0.25)] sm:text-7xl lg:text-8xl xl:text-9xl">
+          <h1 className="text-[length:clamp(1.9rem,9vw,2.5rem)] font-black uppercase leading-none text-black drop-shadow-[0_12px_14px_rgba(0,0,0,0.25)] sm:text-7xl lg:text-8xl xl:text-9xl">
             Shop
           </h1>
 
@@ -122,7 +126,7 @@ async function ShopContent({
               defaultValue={toArray(params.q)[0] ?? ""}
               placeholder="EKSPLORE RASA MANGGA DI BERBAGAI DAERAH"
               aria-label="Cari mangga"
-              className="min-w-0 flex-1 bg-transparent text-xs uppercase tracking-wide text-stone-700 outline-none placeholder:text-stone-400 sm:text-sm"
+              className="min-w-0 flex-1 bg-transparent text-xs uppercase tracking-wide text-stone-700 text-ellipsis outline-none placeholder:text-stone-400 sm:text-sm"
             />
 
             <button
@@ -139,10 +143,7 @@ async function ShopContent({
             <div className="flex flex-col gap-5 lg:flex-row">
 
               {/* FILTER */}
-              <aside className="h-fit w-full shrink-0 rounded-4xl bg-white p-5 lg:sticky lg:top-6 lg:w-60">
-                <h2 className="text-2xl font-black uppercase tracking-[0.45em] text-black">
-                  Filter
-                </h2>
+              <FilterPanel activeCount={activeCount}>
 
                 {/* FILTER LOKASI */}
                 <fieldset className="mt-3">
@@ -236,18 +237,18 @@ async function ShopContent({
 
                   <button
                     type="submit"
-                    className="mx-auto mt-3 block rounded-full bg-[#FFA800] px-8 py-2 text-xs font-bold sm:mt-2 sm:px-5 sm:py-0.5 sm:text-[10px] uppercase text-black shadow-md transition hover:brightness-95"
+                    className="mx-auto mt-3 block w-full rounded-full bg-[#FFA800] px-8 py-3 sm:w-auto text-xs font-bold sm:mt-2 sm:px-5 sm:py-0.5 sm:text-[10px] uppercase text-black shadow-md transition hover:brightness-95"
                   >
                     Apply
                   </button>
                 </fieldset>
 
                 <hr className="mt-3 border-black" />
-              </aside>
+              </FilterPanel>
 
               {/* GRID PRODUK */}
               <div className="flex min-w-0 flex-1 gap-3">
-                <div className="mango-scroll grid max-h-none min-w-0 flex-1 grid-cols-2 content-start gap-3 overflow-y-auto pb-6 pr-0 sm:max-h-[75vh] sm:gap-5 sm:pr-2 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="mango-scroll grid max-h-none min-w-0 flex-1 grid-cols-2 content-start gap-3 overflow-y-auto pb-6 pr-0 sm:max-h-[75vh] sm:gap-5 sm:pr-2 sm:grid-cols-3 xl:grid-cols-4">
 
                   {filtered.length === 0 && (
                     <p className="col-span-full py-16 text-center font-bold text-black">
