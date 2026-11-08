@@ -37,14 +37,14 @@ export default function Footer() {
           </Link>
 
           <Link
-            href="/alur"
+            href="/#alur"
             className="transition hover:text-orange-400"
           >
             Alur
           </Link>
 
           <Link
-            href="/contact"
+            href="/#contact"
             className="transition hover:text-orange-400"
           >
             Contact

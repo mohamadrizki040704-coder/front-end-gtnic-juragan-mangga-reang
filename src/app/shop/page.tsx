@@ -81,13 +81,13 @@ async function ShopContent({
       <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-8">
 
         {/* HEADER */}
-        <header className="relative flex min-h-48 items-center gap-4 pt-10 sm:gap-8 sm:pt-14 lg:pr-64">
+        <header className="relative flex min-h-48 items-center gap-3 pt-28 sm:gap-8 min-[701px]:pt-14 lg:pr-64">
           <div className="w-fit shrink-0">
-            <p className="font-serif text-2xl uppercase tracking-wider text-black sm:text-4xl lg:text-5xl">
+            <p className="font-serif text-lg uppercase tracking-wider text-black sm:text-4xl lg:text-5xl">
               Juragan Mangga
             </p>
 
-            <p className="mt-1 flex justify-between text-4xl font-black leading-none text-[#FFA800] sm:text-6xl lg:text-7xl">
+            <p className="mt-1 flex justify-between text-3xl font-black leading-none text-[#FFA800] sm:text-6xl lg:text-7xl">
               {"REANG".split("").map((c, i) => (
                 <span key={i}>{c}</span>
               ))}
@@ -96,9 +96,9 @@ async function ShopContent({
             <div className="mt-3 h-1.5 w-full bg-[#FFA800]" />
           </div>
 
-          <div className="h-20 w-0.5 shrink-0 bg-black sm:h-28" />
+          <div className="h-14 w-0.5 shrink-0 bg-black sm:h-28" />
 
-          <h1 className="text-5xl font-black uppercase leading-none text-black drop-shadow-[0_12px_14px_rgba(0,0,0,0.25)] sm:text-7xl lg:text-8xl xl:text-9xl">
+          <h1 className="text-4xl font-black uppercase leading-none text-black drop-shadow-[0_12px_14px_rgba(0,0,0,0.25)] sm:text-7xl lg:text-8xl xl:text-9xl">
             Shop
           </h1>
 
@@ -115,14 +115,14 @@ async function ShopContent({
         <form action="/shop" method="GET">
 
           {/* SEARCH BAR */}
-          <div className="relative z-10 mt-6 flex max-w-4xl items-center rounded-full border-[3px] border-black bg-white px-6 py-2 shadow-md">
+          <div className="relative z-10 mt-6 flex max-w-4xl items-center rounded-full border-[3px] border-black bg-white px-4 py-2 shadow-md sm:px-6">
             <input
               type="search"
               name="q"
               defaultValue={toArray(params.q)[0] ?? ""}
               placeholder="EKSPLORE RASA MANGGA DI BERBAGAI DAERAH"
               aria-label="Cari mangga"
-              className="min-w-0 flex-1 bg-transparent text-sm uppercase tracking-wide text-stone-700 outline-none placeholder:text-stone-400"
+              className="min-w-0 flex-1 bg-transparent text-xs uppercase tracking-wide text-stone-700 outline-none placeholder:text-stone-400 sm:text-sm"
             />
 
             <button
@@ -150,16 +150,16 @@ async function ShopContent({
                     Lokasi
                   </legend>
 
-                  <ul className="mt-1 space-y-0.5">
+                  <ul className="mt-1 grid grid-cols-2 gap-x-3 gap-y-1 sm:block sm:space-y-0.5">
                     {lokasiOptions.map((l) => (
                       <li key={l}>
-                        <label className="flex cursor-pointer items-center gap-2 text-xs uppercase tracking-wide text-stone-800">
+                        <label className="flex cursor-pointer items-center gap-2 py-1 text-xs sm:py-0 uppercase tracking-wide text-stone-800">
                           <input
                             type="checkbox"
                             name="lokasi"
                             value={l}
                             defaultChecked={lokasi.includes(l)}
-                            className="size-3 accent-black"
+                            className="size-4 accent-black sm:size-3"
                           />
                           {l}
                         </label>
@@ -180,16 +180,16 @@ async function ShopContent({
                     Jenis Mangga
                   </legend>
 
-                  <ul className="mt-1 space-y-0.5">
+                  <ul className="mt-1 grid grid-cols-2 gap-x-3 gap-y-1 sm:block sm:space-y-0.5">
                     {jenisOptions.map((j) => (
                       <li key={j}>
-                        <label className="flex cursor-pointer items-center gap-2 text-xs uppercase tracking-wide text-stone-800">
+                        <label className="flex cursor-pointer items-center gap-2 py-1 text-xs sm:py-0 uppercase tracking-wide text-stone-800">
                           <input
                             type="checkbox"
                             name="jenis"
                             value={j}
                             defaultChecked={jenis.includes(j)}
-                            className="size-3 accent-black"
+                            className="size-4 accent-black sm:size-3"
                           />
                           {j}
                         </label>
@@ -218,7 +218,7 @@ async function ShopContent({
                       placeholder="MIN"
                       defaultValue={toArray(params.min)[0] ?? ""}
                       aria-label="Harga minimum"
-                      className="w-full min-w-0 rounded-full bg-white px-2 py-1 text-[10px] shadow-md outline-none placeholder:text-stone-300"
+                      className="w-full min-w-0 rounded-full bg-white px-3 py-2 text-sm shadow-md sm:px-2 sm:py-1 sm:text-[10px] outline-none placeholder:text-stone-300"
                     />
 
                     <span>&gt;</span>
@@ -230,13 +230,13 @@ async function ShopContent({
                       placeholder="MAX"
                       defaultValue={toArray(params.max)[0] ?? ""}
                       aria-label="Harga maksimum"
-                      className="w-full min-w-0 rounded-full bg-white px-2 py-1 text-[10px] shadow-md outline-none placeholder:text-stone-300"
+                      className="w-full min-w-0 rounded-full bg-white px-3 py-2 text-sm shadow-md sm:px-2 sm:py-1 sm:text-[10px] outline-none placeholder:text-stone-300"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="mx-auto mt-2 block rounded-full bg-[#FFA800] px-5 py-0.5 text-[10px] font-bold uppercase text-black shadow-md transition hover:brightness-95"
+                    className="mx-auto mt-3 block rounded-full bg-[#FFA800] px-8 py-2 text-xs font-bold sm:mt-2 sm:px-5 sm:py-0.5 sm:text-[10px] uppercase text-black shadow-md transition hover:brightness-95"
                   >
                     Apply
                   </button>
@@ -247,7 +247,7 @@ async function ShopContent({
 
               {/* GRID PRODUK */}
               <div className="flex min-w-0 flex-1 gap-3">
-                <div className="mango-scroll grid max-h-[75vh] min-w-0 flex-1 grid-cols-1 content-start gap-5 overflow-y-auto pb-6 pr-2 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="mango-scroll grid max-h-none min-w-0 flex-1 grid-cols-2 content-start gap-3 overflow-y-auto pb-6 pr-0 sm:max-h-[75vh] sm:gap-5 sm:pr-2 sm:grid-cols-2 xl:grid-cols-4">
 
                   {filtered.length === 0 && (
                     <p className="col-span-full py-16 text-center font-bold text-black">
@@ -276,15 +276,15 @@ async function ShopContent({
                           {product.name}
                         </h3>
 
-                        <p className="mt-0.5 font-mono text-xl font-black text-black">
+                        <p className="mt-0.5 font-mono text-base font-black sm:text-xl text-black">
                           {formatRupiah(product.price)}
                         </p>
 
-                        <p className="mt-0.5 text-sm font-medium uppercase leading-tight tracking-wide text-white">
+                        <p className="mt-0.5 text-xs font-medium uppercase leading-tight tracking-wide text-white sm:text-sm">
                           {product.supplier}
                         </p>
 
-                        <p className="text-sm font-medium uppercase leading-tight tracking-wide text-white">
+                        <p className="text-xs font-medium uppercase leading-tight tracking-wide text-white sm:text-sm">
                           {product.address}
                         </p>
                       </div>

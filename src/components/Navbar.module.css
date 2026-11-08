@@ -372,3 +372,32 @@
     transform: none !important;
   }
 }
+
+/* =========================================
+   RESPONSIF HP (tambahan; desktop tidak berubah)
+========================================= */
+@media (max-width: 700px) {
+  /* biar nama akun yang panjang bisa dipotong (...) dan tidak mendorong keranjang keluar layar */
+  .accountArea > div {
+    min-width: 0;
+  }
+
+  .accountLinks {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 400px) {
+  .primaryNav {
+    gap: 8px 12px;
+  }
+
+  .navLink {
+    font-size: 10px;
+  }
+
+  .accountLinks,
+  .cartLink {
+    font-size: 11px;
+  }
+}

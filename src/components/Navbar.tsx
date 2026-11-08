@@ -74,7 +74,7 @@ function UserIcon() {
   return (
     <svg
       viewBox="0 0 100 100"
-      width="42"
+      width="42" className="h-7 w-7 min-[701px]:h-[42px] min-[701px]:w-[42px]"
       height="42"
       fill="currentColor"
       aria-hidden="true"
@@ -215,17 +215,17 @@ export default function Navbar() {
               onClick={() => setAccountMenuOpen((previous) => !previous)}
               aria-expanded={accountMenuOpen}
               aria-haspopup="true"
-              className="flex max-w-85 items-center gap-3 text-black transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+              className="flex max-w-85 items-center gap-2 text-black min-[701px]:gap-3 transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
             >
               <span className="shrink-0 text-black">
                 <UserIcon />
               </span>
-              <span className="max-w-65 truncate text-2xl font-medium uppercase tracking-[0.08em] sm:text-3xl">{displayName}</span>
+              <span className="max-w-[42vw] truncate text-base font-medium uppercase tracking-[0.08em] min-[701px]:max-w-65 min-[701px]:text-3xl">{displayName}</span>
             </button>
 
             {/* ACCOUNT DROPDOWN */}
             {accountMenuOpen && (
-              <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
+              <div className="absolute left-0 top-full z-50 mt-3 w-64 min-[701px]:left-auto min-[701px]:right-0 overflow-hidden rounded-2xl border border-orange-200 bg-white shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
                 {/* ACCOUNT INFORMATION */}
                 <div className="border-b border-orange-100 bg-orange-50 px-5 py-4">
                   <p className="mt-1 truncate text-lg font-extrabold uppercase text-black">{displayName}</p>
