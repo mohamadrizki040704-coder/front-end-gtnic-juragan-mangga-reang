@@ -260,7 +260,7 @@ export default function Navbar() {
         )}
 
         {/* =========================================
-            SHOPPING CART
+             SHOPPING CART
         ========================================= */}
         <Link href="/keranjang" className={styles.cartLink}>
           {/* Span pembungkus icon dan span text agar animasi .cartLink > span dari CSS kamu berjalan sempurna */}

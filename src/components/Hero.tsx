@@ -76,13 +76,10 @@ export default function HomePage() {
         />
 
         {/* Judul sambutan */}
-        <div className={cx(styles.welcome, anim.welcomeIn)}>
-          <h1>
-            HALLO!!!!!
-            <br />
-            SELAMAT DATANG
-          </h1>
-        </div>
+        <div className="flex flex-col text-white mt-32 md:mt-0 ...">
+  <p>HALLO.....</p>
+        <h1>SELAMAT DATANG</h1>
+</div>
 
         {/* Kartu oranye di belakang gambar mangga */}
         <div
