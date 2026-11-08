@@ -136,7 +136,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} nb-root`}>
 
       {/* NAVIGATION PLATE */}
       <svg
@@ -153,9 +153,9 @@ export default function Navbar() {
       </svg>
 
       {/* PRIMARY NAVIGATION */}
-      <nav className={styles.primaryNav} aria-label="Navigasi utama">
+      <nav className={`${styles.primaryNav} nb-nav`} aria-label="Navigasi utama">
         {navigation.map((item) => (
-          <Link key={item.label} href={item.href} className={styles.navLink}>
+          <Link key={item.label} href={item.href} className={`${styles.navLink} nb-link`}>
             {/* Span pembungkus ini sangat penting untuk animasi transform di CSS-mu */}
             <span className={styles.navIcon}>
               {item.icon}
@@ -187,7 +187,7 @@ export default function Navbar() {
       {/* =========================================
          ACCOUNT AREA
       ========================================= */}
-      <div className={styles.accountArea}>
+      <div className={`${styles.accountArea} nb-account`}>
 
         {/* BELUM LOGIN */}
         {!isLoggedIn && (
@@ -220,7 +220,7 @@ export default function Navbar() {
               <span className="shrink-0 text-black">
                 <UserIcon />
               </span>
-              <span className="max-w-[42vw] truncate text-base font-medium uppercase tracking-[0.08em] min-[701px]:max-w-65 min-[701px]:text-3xl">{displayName}</span>
+              <span className="nb-username max-w-[42vw] truncate text-base font-medium uppercase tracking-[0.08em] min-[701px]:max-w-65 min-[701px]:text-3xl">{displayName}</span>
             </button>
 
             {/* ACCOUNT DROPDOWN */}
@@ -262,7 +262,7 @@ export default function Navbar() {
         {/* =========================================
              SHOPPING CART
         ========================================= */}
-        <Link href="/keranjang" className={styles.cartLink}>
+        <Link href="/keranjang" className={`${styles.cartLink} nb-cart`}>
           {/* Span pembungkus icon dan span text agar animasi .cartLink > span dari CSS kamu berjalan sempurna */}
           <span className={styles.cartIcon}>
             {CartIcon}

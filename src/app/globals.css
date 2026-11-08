@@ -36,3 +36,65 @@ input {
   color: #17120b;
 }
 
+
+/* ===== Responsive v2: navbar & overflow ===== */
+html, body { overflow-x: clip; }
+
+.nb-username {
+  font-size: clamp(0.875rem, 4vw, 1.875rem) !important;
+  letter-spacing: 0.04em !important;
+}
+
+@media (max-width: 700px) {
+  .nb-root {
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .nb-nav {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-around !important;
+    gap: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 8px 4px 4px !important;
+    box-sizing: border-box !important;
+  }
+  .nb-link {
+    font-size: 11px !important;
+    gap: 3px !important;
+    padding: 6px 4px !important;
+    white-space: nowrap !important;
+    min-width: 0 !important;
+  }
+  .nb-account {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 6px 12px !important;
+    box-sizing: border-box !important;
+  }
+  .nb-account > div:first-child { min-width: 0; flex: 1 1 auto; }
+  .nb-account button { max-width: 100%; }
+  .nb-cart {
+    flex: 0 0 auto !important;
+    font-size: 12px !important;
+    gap: 4px !important;
+    white-space: nowrap !important;
+  }
+}

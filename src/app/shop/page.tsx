@@ -85,7 +85,7 @@ async function ShopContent({
       <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-8">
 
         {/* HEADER */}
-        <header className="relative flex min-h-48 items-center gap-3 pt-28 sm:gap-8 min-[701px]:pt-14 lg:pr-64">
+        <header className="relative flex min-h-48 items-center gap-3 pt-40 sm:gap-8 min-[701px]:pt-14 lg:pr-64">
           <div className="w-fit shrink-0">
             <p className="font-serif text-[length:clamp(0.75rem,3.6vw,1.1rem)] uppercase tracking-wider text-black sm:text-4xl lg:text-5xl">
               Juragan Mangga
