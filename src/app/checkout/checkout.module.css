@@ -808,3 +808,164 @@
     width: 100%;
   }
 }
+
+/* ==============================
+   CHECKOUT FIXES 2
+   Tempel di PALING BAWAH file CSS checkout
+   (di bawah isi checkout-fixes.css)
+============================== */
+
+/* --- Lebar kolom: dipakai bersama oleh header tabel & baris produk --- */
+.checkoutContainer {
+  --qty-w: 240px;
+  --unit-w: 90px;
+  --total-w: 160px;
+  --col-gap: 30px;
+}
+
+/* --- Baris produk: kolom dengan lebar tetap --- */
+.productCard {
+  gap: var(--col-gap);
+}
+
+.quantityControl {
+  width: var(--qty-w);
+  flex-shrink: 0;
+  justify-content: center;
+  margin: 0;
+}
+
+.unit {
+  width: var(--unit-w);
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.itemTotal {
+  width: var(--total-w);
+  min-width: 0;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+/* --- Header tabel: tepat di atas kolom masing-masing --- */
+.tableHeader {
+  top: 10px;
+  /* padding container (55) + border kartu (10) + padding kartu (30) */
+  right: 95px;
+  gap: var(--col-gap);
+  font-size: 20px;
+}
+
+.tableHeader > * {
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.tableHeader > :nth-child(1) {
+  width: var(--qty-w);
+}
+
+.tableHeader > :nth-child(2) {
+  width: var(--unit-w);
+}
+
+.tableHeader > :nth-child(3) {
+  width: var(--total-w);
+  text-align: right;
+}
+
+/* --- Tombol + / − lebih besar & seimbang --- */
+.quantityButton {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+}
+
+/* --- Header: mangga tidak menyentuh KERANJANG --- */
+.headerMango {
+  top: 78px;
+  right: 50px;
+  width: 180px;
+  height: 160px;
+}
+
+/* --- Garis hitam vertikal sejajar dengan garis oranye --- */
+.heading {
+  margin-top: 22px;
+}
+
+.heading p {
+  margin-top: 4px;
+  line-height: 1;
+}
+
+.heading h1 {
+  line-height: 0.95;
+}
+
+/* --- Info produk --- */
+.productInformation h2 {
+  word-break: break-word;
+}
+
+/* ==============================
+   TABLET
+============================== */
+@media (max-width: 1000px) {
+  .checkoutContainer {
+    --qty-w: 200px;
+    --unit-w: 60px;
+    --total-w: 120px;
+    --col-gap: 15px;
+  }
+
+  .tableHeader {
+    /* padding container (25) + border kartu (10) + padding kartu (15) */
+    right: 50px;
+    font-size: 16px;
+  }
+
+  .itemTotal {
+    font-size: 18px;
+  }
+
+  .headerMango {
+    top: 60px;
+    right: 0;
+    width: 130px;
+    height: 120px;
+  }
+}
+
+/* ==============================
+   MOBILE
+============================== */
+@media (max-width: 650px) {
+  .checkoutContainer {
+    --qty-w: auto;
+    --unit-w: auto;
+    --total-w: auto;
+  }
+
+  .quantityControl {
+    justify-content: flex-start;
+  }
+
+  .unit,
+  .itemTotal {
+    text-align: left;
+  }
+
+  .quantityButton {
+    font-size: 36px;
+  }
+
+  .headerMango {
+    top: 60px;
+    width: 75px;
+    height: 70px;
+  }
+}
