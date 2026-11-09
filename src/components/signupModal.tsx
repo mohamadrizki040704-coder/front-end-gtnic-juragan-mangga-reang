@@ -12,7 +12,6 @@ import Image from "next/image";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
 
 import styles from "./SignupAnimation.module.css";
-import { loginDemo } from "../lib/auth";
 
 /* =========================================
    FONT & ASSET
@@ -168,7 +167,7 @@ const inputClass = `${fieldSurface} h-12 w-full rounded-xl px-5 text-xs font-sem
 const eyeButtonClass =
   "absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#5a3300] transition hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60";
 
-const socialButtonClass = `${styles.socialButton || ""} ${fieldSurface} flex h-12 cursor-pointer items-center gap-2 rounded-xl px-3 transition hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/70`;
+const socialButtonClass = `${styles.socialButton || ""} ${fieldSurface} flex h-12 cursor-not-allowed items-center gap-2 rounded-xl px-3 opacity-50 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/70`;
 
 const socialTextClass =
   "flex-1 text-center text-[9px] font-semibold uppercase leading-snug tracking-[0.3em] text-[#9a5a00] sm:text-[11px]";
@@ -323,6 +322,7 @@ export default function SignupModal({
           email: email.trim(),
           password: password,
           namaLengkap: username.trim(),
+          nomorTelepon: phone.trim(),
           role: DEFAULT_ROLE,
         }),
       });
@@ -387,12 +387,6 @@ export default function SignupModal({
     if (event.target === event.currentTarget && !loading) {
       onClose();
     }
-  };
-
-  const handleDemoLogin = (provider: "google" | "whatsapp") => {
-    loginDemo(provider);
-    setError("");
-    setSuccess(`Login demo dengan ${provider === "google" ? "Google" : "WhatsApp"} berhasil. Kamu sudah masuk sebagai akun demo.`);
   };
 
   if (!mounted || !open) return null;
@@ -632,29 +626,31 @@ export default function SignupModal({
             <div className="mx-auto mt-8 grid max-w-[34rem] gap-4 sm:grid-cols-2 md:mt-[4cqw] md:gap-[2cqw]">
               <button
                 type="button"
-                onClick={() => handleDemoLogin("google")}
-                aria-label="Login demo dengan Google"
+                disabled
+                title="Login Google belum dikonfigurasi"
+                aria-label="Login dengan Google belum tersedia"
                 className={socialButtonClass}
               >
                 <GoogleIcon />
                 <span className={socialTextClass}>
                   Login with
                   <br />
-                  Google
+                  Google (segera)
                 </span>
               </button>
 
               <button
                 type="button"
-                onClick={() => handleDemoLogin("whatsapp")}
-                aria-label="Login demo dengan WhatsApp"
+                disabled
+                title="Login WhatsApp belum dikonfigurasi"
+                aria-label="Login dengan WhatsApp belum tersedia"
                 className={socialButtonClass}
               >
                 <WhatsAppIcon />
                 <span className={socialTextClass}>
                   Login with
                   <br />
-                  WhatsApp
+                  WhatsApp (segera)
                 </span>
               </button>
             </div>

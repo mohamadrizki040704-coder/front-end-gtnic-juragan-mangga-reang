@@ -16,7 +16,7 @@ import {
 } from "next/font/google";
 
 import styles from "./Animation.module.css";
-import { loginDemo, loginRequest } from "../lib/auth";
+import { loginRequest } from "../lib/auth";
 
 /* =========================================
    FONT
@@ -229,6 +229,7 @@ const socialBtn = `
   rounded-xl px-2
   transition-all duration-300
   hover:brightness-105 active:scale-[0.98]
+  disabled:cursor-not-allowed disabled:opacity-50
   focus-visible:outline-none
   focus-visible:ring-4
   focus-visible:ring-white/70
@@ -450,11 +451,6 @@ export default function LoginModal({
     } finally {
       setLoading(false);
     }
-  }
-
-  function handleDemoLogin(provider: "google" | "whatsapp") {
-    loginDemo(provider);
-    onClose();
   }
 
   /* =========================================
@@ -847,9 +843,9 @@ export default function LoginModal({
 
               <button
                 type="button"
-                onClick={() => handleDemoLogin("google")}
-                disabled={loading}
-                aria-label="Login demo dengan Google"
+                disabled
+                title="Login Google belum dikonfigurasi"
+                aria-label="Login dengan Google belum tersedia"
                 className={socialBtn}
               >
                 <GoogleIcon />
@@ -857,7 +853,7 @@ export default function LoginModal({
                 <span className={socialText}>
                   Login with
                   <br />
-                  Google
+                  Google (segera)
                 </span>
               </button>
 
@@ -865,9 +861,9 @@ export default function LoginModal({
 
               <button
                 type="button"
-                onClick={() => handleDemoLogin("whatsapp")}
-                disabled={loading}
-                aria-label="Login demo dengan WhatsApp"
+                disabled
+                title="Login WhatsApp belum dikonfigurasi"
+                aria-label="Login dengan WhatsApp belum tersedia"
                 className={socialBtn}
               >
                 <WhatsappIcon />
@@ -875,7 +871,7 @@ export default function LoginModal({
                 <span className={socialText}>
                   Login with
                   <br />
-                  WhatsApp
+                  WhatsApp (segera)
                 </span>
               </button>
 

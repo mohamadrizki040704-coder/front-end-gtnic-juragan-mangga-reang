@@ -12,9 +12,6 @@ type JwtPayload = {
   role?: string;
   exp?: number;
   demo?: boolean;
-  email?: string;
-  namaLengkap?: string;
-  namaPerusahaan?: string | null;
 };
 
 function decodeJwt(token: string): JwtPayload | null {
@@ -44,7 +41,7 @@ export function getToken(): string | null {
   try {
     const token = window.localStorage.getItem(TOKEN_KEY);
     if (!token) return null;
-    if (isExpired(token)) {
+    if (decodeJwt(token)?.demo || isExpired(token)) {
       window.localStorage.removeItem(TOKEN_KEY);
       return null;
     }
@@ -59,25 +56,6 @@ export function setToken(token: string) {
     window.localStorage.setItem(TOKEN_KEY, token);
   } catch {}
   window.dispatchEvent(new Event(AUTH_EVENT));
-}
-
-export type DemoLoginProvider = "demo" | "google" | "whatsapp";
-
-export function loginDemo(provider: DemoLoginProvider): void {
-  const profile = {
-    user_id: 1,
-    role: "BUYER_B2B",
-    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
-    demo: true,
-    email: `${provider}@demo.mangga-reang.test`,
-    namaLengkap: provider === "demo" ? "Pengguna Demo" : `Demo ${provider}`,
-    namaPerusahaan: "Toko Demo",
-  };
-  const payload = btoa(JSON.stringify(profile))
-    .replace(/=/g, "")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_");
-  setToken(`demo.${payload}.local`);
 }
 
 export function clearToken() {
@@ -191,9 +169,7 @@ export async function authFetch(path: string, init: RequestInit = {}): Promise<R
   if (init.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
-  if (token && !decodeJwt(token)?.demo) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
+  if (token) headers.set("Authorization", `Bearer ${token}`);
 
   const response = await fetch(`${API_URL}${path}`, { ...init, headers });
 
@@ -210,6 +186,7 @@ export type Profile = {
   id: number;
   email: string;
   namaLengkap: string;
+  nomorTelepon?: string | null;
   role: string;
   namaPerusahaan: string | null;
 };
@@ -219,7 +196,7 @@ export function useProfile(): Profile | null {
   const [state, setState] = useState<{ token: string; profile: Profile } | null>(null);
 
   useEffect(() => {
-    if (!token || decodeJwt(token)?.demo) return;
+    if (!token) return;
 
     let active = true;
 
@@ -238,17 +215,6 @@ export function useProfile(): Profile | null {
       active = false;
     };
   }, [token]);
-
-  const payload = token ? decodeJwt(token) : null;
-  if (payload?.demo) {
-    return {
-      id: 1,
-      email: payload.email ?? "demo@demo.mangga-reang.test",
-      namaLengkap: payload.namaLengkap ?? "Pengguna Demo",
-      role: payload.role ?? "BUYER_B2B",
-      namaPerusahaan: payload.namaPerusahaan ?? "Toko Demo",
-    };
-  }
 
   // hanya dipakai jika milik token yang sedang aktif (aman saat ganti akun)
   return token && state?.token === token ? state.profile : null;

@@ -16,7 +16,23 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Backend API
+
+Set `NEXT_PUBLIC_API_URL` to the backend base URL (without a trailing slash or
+`/api`), for example:
+
+```env
+NEXT_PUBLIC_API_URL=https://your-backend.example.com
+```
+
+Set this variable in the frontend deployment environment as well as local
+`.env`. Configure the backend's `CORS_ORIGINS` to include the exact frontend
+origin, such as `https://your-frontend.example.com`. Backend deployments that
+include database migrations must run `python -m alembic upgrade head`.
+
+Registration and login use the backend's `/api/auth/register` and
+`/api/auth/login` endpoints. Google and WhatsApp sign-in are unavailable until
+their OAuth/verification integrations are configured on the backend.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
