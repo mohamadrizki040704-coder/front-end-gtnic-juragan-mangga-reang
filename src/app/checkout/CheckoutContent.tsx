@@ -1,73 +1,99 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import styles from "./checkout.module.css";
+
+const PAYMENT_METHODS = ["TRANSFER", "COD", "QRIS", "E-WALLET"];
+
+/** "25000", "25.000", "25000.00", "Rp 25.000" -> 25000 */
+function parsePrice(value: string | null): number {
+  if (!value) return 0;
+  const cleaned = value.replace(/[^\d.,]/g, "");
+  if (!cleaned) return 0;
+
+  let normalized = cleaned;
+  if (cleaned.includes(",") && cleaned.includes(".")) {
+    normalized = cleaned.replace(/\./g, "").replace(",", ".");
+  } else if (cleaned.includes(",")) {
+    normalized = cleaned.replace(",", ".");
+  } else if (/^\d{1,3}(\.\d{3})+$/.test(cleaned)) {
+    normalized = cleaned.replace(/\./g, "");
+  }
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+const formatRupiah = (value: number) =>
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(value);
 
 export default function CheckoutPage() {
   const params = useSearchParams();
 
-  // DATA PRODUK DARI HALAMAN DETAIL
+  // DATA PRODUK DARI HALAMAN DETAIL (lewat query string)
   const name = params.get("name") || "Produk Mangga";
-  const price = Number(params.get("price")) || 0;
-  const supplier = params.get("supplier") || "-";
-  const supplierAddress = params.get("address") || "-";
+  // menerima ?price= atau ?harga=
+  const price = parsePrice(params.get("price") ?? params.get("harga"));
+  const supplier = params.get("supplier") || "";
+  const supplierAddress = params.get("address") || "";
   const image = params.get("image") || "/images/manggaHarumManis.png";
-  const label = params.get("label") || "1kg";
 
-  const [quantity, setQuantity] = useState(
-    Number(params.get("quantity")) || 1
-  );
+  const [quantity, setQuantity] = useState(() => {
+    const raw = Number.parseFloat(params.get("quantity") ?? "");
+    return Number.isFinite(raw) && raw > 0 ? raw : 1;
+  });
 
   const [customerName, setCustomerName] = useState("");
   const [address, setAddress] = useState("");
   const [editingAddress, setEditingAddress] = useState(false);
   const [payment, setPayment] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const total = quantity * price;
-
-  const formatRupiah = (value: number) =>
-    new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-    }).format(value);
+  const productMissing = price <= 0;
 
   const handleCheckout = () => {
+    setError("");
+    setSuccess("");
+
+    if (productMissing) {
+      setError("Data harga produk tidak ditemukan. Pilih produk dari halaman Shop.");
+      return;
+    }
     if (!customerName.trim()) {
-      alert("Masukkan nama konsumen!");
+      setError("Masukkan nama konsumen!");
       return;
     }
-
     if (!address.trim()) {
-      alert("Masukkan alamat pengantaran!");
+      setError("Masukkan alamat pengantaran!");
       return;
     }
-
     if (!payment) {
-      alert("Pilih metode pembayaran!");
+      setError("Pilih metode pembayaran!");
       return;
     }
 
-    alert(
-      `Pesanan berhasil dibuat!\n\nProduk: ${name}\nSupplier: ${supplier}\nJumlah: ${quantity} Kg\nTotal: ${formatRupiah(total)}\nPembayaran: ${payment}`
+    setSuccess(
+      `Pesanan berhasil dibuat! ${name}${
+        supplier ? ` dari ${supplier}` : ""
+      }, ${quantity} Kg, total ${formatRupiah(total)} (${payment}).`,
     );
   };
 
   return (
     <main className={styles.checkoutPage}>
-
       {/* HEADER */}
       <header className={styles.header}>
         <div className={styles.brand}>
-          <div className={styles.brandTitle}>
-            JURAGAN MANGGA
-          </div>
-
-          <div className={styles.brandName}>
-            REANG
-          </div>
-
+          <div className={styles.brandTitle}>JURAGAN MANGGA</div>
+          <div className={styles.brandName}>REANG</div>
           <div className={styles.brandLine}></div>
         </div>
 
@@ -76,6 +102,7 @@ export default function CheckoutPage() {
           <p>PRODUCT</p>
         </div>
 
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/manggaLandingP.png"
           alt="Mangga Juragan Mangga Reang"
@@ -85,7 +112,6 @@ export default function CheckoutPage() {
 
       {/* CHECKOUT CONTAINER */}
       <section className={styles.checkoutContainer}>
-
         <div className={styles.tableHeader}>
           <span>JUMLAH</span>
           <span>SATUAN</span>
@@ -94,102 +120,115 @@ export default function CheckoutPage() {
 
         {/* PRODUCT CARD */}
         <div className={styles.productCard}>
-
           <div className={styles.productImageWrapper}>
-            <img
-              src={image}
-              alt={name}
-              className={styles.productImage}
-            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={image} alt={name} className={styles.productImage} />
           </div>
 
           <div className={styles.productInformation}>
             <h2>{name}</h2>
 
-            <p className={styles.productPrice}>
-              {formatRupiah(price)}/Kg
-            </p>
+            <p className={styles.productPrice}>{formatRupiah(price)}/Kg</p>
 
-            <p className={styles.supplier}>
-              {supplier}
-            </p>
-
-            <p className={styles.supplier}>
-              {supplierAddress}
-            </p>
+            {supplier && <p className={styles.supplier}>{supplier}</p>}
+            {supplierAddress && (
+              <p className={styles.supplier}>{supplierAddress}</p>
+            )}
           </div>
 
-          {/* QUANTITY */}
+          {/* QUANTITY (DOM: + input − ; CSS membalik jadi − input +) */}
           <div className={styles.quantityControl}>
             <button
+              type="button"
               onClick={() => setQuantity((q) => q + 1)}
               className={styles.quantityButton}
+              aria-label="Tambah jumlah"
             >
               +
             </button>
 
             <input
               type="number"
-              min={1}
+              min={0.1}
+              step="0.1"
+              inputMode="decimal"
               value={quantity}
-              onChange={(e) =>
-                setQuantity(Math.max(1, Number(e.target.value) || 1))
-              }
+              onChange={(e) => {
+                const nextValue = Number.parseFloat(e.target.value);
+                setQuantity(Number.isFinite(nextValue) && nextValue > 0 ? nextValue : 1);
+              }}
               className={styles.quantityInput}
+              aria-label="Jumlah"
             />
 
             <button
+              type="button"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              disabled={quantity <= 1}
               className={styles.quantityButton}
+              aria-label="Kurangi jumlah"
             >
-              -
+              −
             </button>
           </div>
 
-          <div className={styles.unit}>
-            Kg
-          </div>
+          <div className={styles.unit}>Kg</div>
 
-          <div className={styles.itemTotal}>
-            {formatRupiah(total)}
-          </div>
+          <div className={styles.itemTotal}>{formatRupiah(total)}</div>
         </div>
+
+        {productMissing && (
+          <p role="alert" className={styles.errorText}>
+            Data produk belum lengkap (harga tidak terbaca).{" "}
+            <Link href="/shop" style={{ textDecoration: "underline" }}>
+              Pilih produk dari Shop
+            </Link>
+          </p>
+        )}
 
         {/* ADDRESS */}
         <section className={styles.addressSection}>
           <h3>ALAMAT PENGANTARAN</h3>
 
           <div className={styles.addressRow}>
-            <label>NAMA KONSUMEN</label>
+            <label htmlFor="customerName">NAMA KONSUMEN</label>
 
             <input
+              id="customerName"
               type="text"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
               className={styles.customerInput}
               placeholder="MASUKKAN NAMA KONSUMEN"
+              autoComplete="name"
             />
           </div>
 
           <div className={styles.addressRow}>
-            <label>ALAMAT KONSUMEN</label>
+            <label htmlFor="customerAddress">ALAMAT KONSUMEN</label>
 
             {editingAddress ? (
               <input
+                id="customerAddress"
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 className={styles.addressInput}
                 placeholder="MASUKKAN ALAMAT LENGKAP"
+                autoComplete="street-address"
                 autoFocus
               />
             ) : (
-              <div className={styles.addressDisplay}>
-                {address || "ALAMAT KONSUMEN"}
+              <div
+                className={styles.addressDisplay}
+                style={address ? undefined : { color: "#9a9a9a", fontWeight: 500 }}
+              >
+                {address || "BELUM ADA ALAMAT, KLIK UBAH ALAMAT"}
               </div>
             )}
 
             <button
+              type="button"
               className={styles.editAddressButton}
               onClick={() => setEditingAddress(!editingAddress)}
             >
@@ -203,10 +242,12 @@ export default function CheckoutPage() {
           <h3>METODE PEMBAYARAN</h3>
 
           <div className={styles.paymentOptions}>
-            {["TRANSFER", "COD", "QRIS", "E-WALLET"].map((method) => (
+            {PAYMENT_METHODS.map((method) => (
               <button
                 key={method}
+                type="button"
                 onClick={() => setPayment(method)}
+                aria-pressed={payment === method}
                 className={`${styles.paymentButton} ${
                   payment === method ? styles.paymentActive : ""
                 }`}
@@ -217,6 +258,21 @@ export default function CheckoutPage() {
           </div>
         </section>
 
+        {error && (
+          <p role="alert" className={styles.errorText}>
+            {error}
+          </p>
+        )}
+        {success && (
+          <p
+            role="status"
+            className={styles.errorText}
+            style={{ color: "#0a7a0a" }}
+          >
+            {success}
+          </p>
+        )}
+
         {/* TOTAL */}
         <div className={styles.totalSection}>
           <div className={styles.totalInformation}>
@@ -225,13 +281,14 @@ export default function CheckoutPage() {
           </div>
 
           <button
+            type="button"
             className={styles.checkoutButton}
             onClick={handleCheckout}
+            disabled={productMissing || Boolean(success)}
           >
             CHECKOUT
           </button>
         </div>
-
       </section>
     </main>
   );
