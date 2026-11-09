@@ -31,19 +31,44 @@ function readRaw(key: string): string {
   }
 }
 
+function coerceNumber(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.trim() !== "") {
+    const parsed = Number(value.replace(/\s+/g, ""));
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
 function parse(raw: string): CartItem[] {
   try {
     const data: unknown = JSON.parse(raw);
     if (!Array.isArray(data)) return [];
-    return data.filter(
-      (i): i is CartItem =>
-        !!i &&
-        typeof i.id === "string" &&
-        typeof i.name === "string" &&
-        typeof i.price === "number" &&
-        typeof i.qty === "number" &&
-        (i.unit === "Kg" || i.unit === "Ton")
-    );
+
+    return data.flatMap((item) => {
+      if (!item || typeof item !== "object") return [];
+
+      const record = item as Record<string, unknown>;
+      const id = typeof record.id === "string" ? record.id : "";
+      const name = typeof record.name === "string" ? record.name : "";
+      const price = coerceNumber(record.price);
+      const qty = coerceNumber(record.qty);
+      const unit = record.unit;
+
+      if (!id || !name || price === null || qty === null) return [];
+      if (unit !== "Kg" && unit !== "Ton") return [];
+
+      return [{
+        id,
+        name,
+        price,
+        supplier: typeof record.supplier === "string" ? record.supplier : "",
+        address: typeof record.address === "string" ? record.address : "",
+        image: typeof record.image === "string" ? record.image : "",
+        qty,
+        unit,
+      }];
+    });
   } catch {
     return [];
   }
