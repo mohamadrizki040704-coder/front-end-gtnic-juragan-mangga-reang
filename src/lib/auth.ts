@@ -7,7 +7,15 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/+$/, "
 const TOKEN_KEY = "mangga_access_token";
 const AUTH_EVENT = "mangga-auth-change";
 
-type JwtPayload = { user_id?: number | string; role?: string; exp?: number };
+type JwtPayload = {
+  user_id?: number | string;
+  role?: string;
+  exp?: number;
+  demo?: boolean;
+  email?: string;
+  namaLengkap?: string;
+  namaPerusahaan?: string | null;
+};
 
 function decodeJwt(token: string): JwtPayload | null {
   try {
@@ -51,6 +59,25 @@ export function setToken(token: string) {
     window.localStorage.setItem(TOKEN_KEY, token);
   } catch {}
   window.dispatchEvent(new Event(AUTH_EVENT));
+}
+
+export type DemoLoginProvider = "demo" | "google" | "whatsapp";
+
+export function loginDemo(provider: DemoLoginProvider): void {
+  const profile = {
+    user_id: 1,
+    role: "BUYER_B2B",
+    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+    demo: true,
+    email: `${provider}@demo.mangga-reang.test`,
+    namaLengkap: provider === "demo" ? "Pengguna Demo" : `Demo ${provider}`,
+    namaPerusahaan: "Toko Demo",
+  };
+  const payload = btoa(JSON.stringify(profile))
+    .replace(/=/g, "")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_");
+  setToken(`demo.${payload}.local`);
 }
 
 export function clearToken() {
@@ -164,7 +191,9 @@ export async function authFetch(path: string, init: RequestInit = {}): Promise<R
   if (init.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
-  if (token) headers.set("Authorization", `Bearer ${token}`);
+  if (token && !decodeJwt(token)?.demo) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
 
   const response = await fetch(`${API_URL}${path}`, { ...init, headers });
 
@@ -190,7 +219,7 @@ export function useProfile(): Profile | null {
   const [state, setState] = useState<{ token: string; profile: Profile } | null>(null);
 
   useEffect(() => {
-    if (!token) return;
+    if (!token || decodeJwt(token)?.demo) return;
 
     let active = true;
 
@@ -209,6 +238,17 @@ export function useProfile(): Profile | null {
       active = false;
     };
   }, [token]);
+
+  const payload = token ? decodeJwt(token) : null;
+  if (payload?.demo) {
+    return {
+      id: 1,
+      email: payload.email ?? "demo@demo.mangga-reang.test",
+      namaLengkap: payload.namaLengkap ?? "Pengguna Demo",
+      role: payload.role ?? "BUYER_B2B",
+      namaPerusahaan: payload.namaPerusahaan ?? "Toko Demo",
+    };
+  }
 
   // hanya dipakai jika milik token yang sedang aktif (aman saat ganti akun)
   return token && state?.token === token ? state.profile : null;

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
-import { loginRequest, useAuth } from "../../lib/auth";
+import { loginDemo, loginRequest, useAuth } from "../../lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -106,6 +106,17 @@ export default function LoginPage() {
             className="w-full rounded-md bg-orange-600 py-2 font-semibold text-white transition hover:bg-orange-700 disabled:bg-orange-300"
           >
             {isLoading ? "Memproses..." : "Login"}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              loginDemo("demo");
+              router.push("/");
+            }}
+            disabled={isLoading}
+            className="w-full rounded-md border border-orange-600 py-2 font-semibold text-orange-700 transition hover:bg-orange-50 disabled:opacity-50"
+          >
+            Masuk dengan akun demo
           </button>
         </form>
       </div>

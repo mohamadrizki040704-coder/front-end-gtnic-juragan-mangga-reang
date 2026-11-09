@@ -16,7 +16,7 @@ import {
 } from "next/font/google";
 
 import styles from "./Animation.module.css";
-import { loginRequest } from "../lib/auth";
+import { loginDemo, loginRequest } from "../lib/auth";
 
 /* =========================================
    FONT
@@ -225,10 +225,10 @@ const inputClass = `
 
 const socialBtn = `
   ${fieldSurface}
-  flex h-12 items-center gap-2
+  flex h-12 cursor-pointer items-center gap-2
   rounded-xl px-2
   transition-all duration-300
-  hover:brightness-105
+  hover:brightness-105 active:scale-[0.98]
   focus-visible:outline-none
   focus-visible:ring-4
   focus-visible:ring-white/70
@@ -450,6 +450,11 @@ export default function LoginModal({
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleDemoLogin(provider: "google" | "whatsapp") {
+    loginDemo(provider);
+    onClose();
   }
 
   /* =========================================
@@ -842,6 +847,9 @@ export default function LoginModal({
 
               <button
                 type="button"
+                onClick={() => handleDemoLogin("google")}
+                disabled={loading}
+                aria-label="Login demo dengan Google"
                 className={socialBtn}
               >
                 <GoogleIcon />
@@ -857,6 +865,9 @@ export default function LoginModal({
 
               <button
                 type="button"
+                onClick={() => handleDemoLogin("whatsapp")}
+                disabled={loading}
+                aria-label="Login demo dengan WhatsApp"
                 className={socialBtn}
               >
                 <WhatsappIcon />
