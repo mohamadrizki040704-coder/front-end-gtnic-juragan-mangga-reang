@@ -650,3 +650,161 @@
     font-size: 18px;
   }
 }
+
+/* ==============================
+   CHECKOUT FIXES
+   Tempel di PALING BAWAH file CSS checkout
+============================== */
+
+/* --- Header: mangga tidak lagi menimpa nama user & keranjang --- */
+.header {
+  padding-top: 12px;
+}
+
+.heading {
+  margin-top: 35px;
+}
+
+.headerMango {
+  top: 55px;
+  right: 40px;
+  width: 200px;
+  height: 180px;
+  z-index: 1;
+}
+
+/* --- Jumlah: urutan jadi  [ − ] [ 1 ] [ + ]  --- */
+.quantityControl {
+  flex-direction: row-reverse;
+}
+
+.quantityButton {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.quantityButton:hover {
+  background: #ffffff30;
+}
+
+.quantityButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- Form alamat: input lebih tinggi & terbaca --- */
+.customerInput,
+.addressInput,
+.addressDisplay {
+  height: 48px;
+  font-size: 20px;
+}
+
+.customerInput::placeholder,
+.addressInput::placeholder {
+  color: #9a9a9a;
+  font-weight: 500;
+}
+
+.customerInput:focus,
+.addressInput:focus {
+  box-shadow: 0 0 0 4px #ffffff70;
+}
+
+.addressDisplay {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 48px;
+}
+
+.editAddressButton {
+  height: 48px;
+}
+
+/* --- Metode pembayaran --- */
+.paymentButton {
+  height: 46px;
+  font-size: 15px;
+}
+
+.paymentButton:focus-visible,
+.checkoutButton:focus-visible,
+.editAddressButton:focus-visible {
+  outline: 3px solid #000;
+  outline-offset: 2px;
+}
+
+/* --- Tombol bayar --- */
+.checkoutButton {
+  padding: 12px 30px;
+}
+
+.checkoutButton:disabled {
+  background: #9bd89b;
+  color: #00000070;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- Pesan error / kosong (opsional dipakai di TSX) --- */
+.errorText {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #fff;
+  color: #b00020;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.emptyState {
+  padding: 40px 0;
+  text-align: center;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1000px) {
+  .headerMango {
+    top: 45px;
+    right: 0;
+    width: 140px;
+    height: 130px;
+  }
+}
+
+@media (max-width: 650px) {
+  .headerMango {
+    top: 55px;
+    width: 80px;
+    height: 75px;
+  }
+
+  .customerInput,
+  .addressInput,
+  .addressDisplay {
+    height: 42px;
+    line-height: 42px;
+    font-size: 16px;
+  }
+
+  .editAddressButton {
+    height: 42px;
+  }
+
+  .checkoutButton {
+    width: 100%;
+  }
+}
