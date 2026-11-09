@@ -83,7 +83,7 @@ export default async function ProductDetailPage({
         {/* ===== Panel oranye ===== */}
         <div className="-mt-7 rounded-t-[3rem] bg-[#FFA800] px-4 pb-10 pt-12 shadow-[0_0_60px_rgba(255,168,0,0.6)] sm:px-7">
           <div className="flex gap-3">
-            <div className="min-w-0 flex-1 lg:pr-6">
+            <div className="min-w-0 flex-1">
               {/* ----- Kartu detail utama ----- */}
               <article className="flex flex-col items-center gap-5 rounded-[2.5rem] border-[3px] border-[#D48A00] bg-[#FFA800] p-4 shadow-[inset_0_-4px_10px_rgba(0,0,0,0.15)] sm:flex-row sm:gap-10 sm:p-8">
                 <div className="relative aspect-square w-full max-w-56 shrink-0 overflow-hidden rounded-4xl bg-white">
@@ -170,13 +170,6 @@ export default async function ProductDetailPage({
               </ul>
             </div>
 
-            {/* Track scrollbar dekoratif sesuai desain */}
-            <div
-              aria-hidden="true"
-              className="hidden h-[70vh] w-3 shrink-0 rounded-full bg-[#D48A00] lg:block"
-            >
-              <div className="m-0.5 h-20 rounded-full bg-[#FFC21A]" />
-            </div>
           </div>
         </div>
       </section>
