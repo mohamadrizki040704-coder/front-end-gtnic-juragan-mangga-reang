@@ -113,48 +113,6 @@ function CloseIcon() {
   );
 }
 
-function GoogleIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true">
-      <path
-        fill="#FFC107"
-        d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5h6.7c3.9-3.6 6-8.9 6-14.9Z"
-      />
-      <path
-        fill="#FF3D00"
-        d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.7-5c-1.8 1.2-4 2-6.8 2-5.3 0-9.8-3.6-11.4-8.5H5.7v5.2A20 20 0 0 0 24 44Z"
-      />
-      <path
-        fill="#4CAF50"
-        d="M12.6 27.6a12 12 0 0 1 0-7.2v-5.2H5.7a20 20 0 0 0 0 17.6l6.9-5.2Z"
-      />
-      <path
-        fill="#1976D2"
-        d="M24 12c3 0 5.7 1 7.8 3l5.8-5.8A19.5 19.5 0 0 0 24 4 20 20 0 0 0 5.7 15.2l6.9 5.2C14.2 15.6 18.7 12 24 12Z"
-      />
-    </svg>
-  );
-}
-
-function WhatsAppIcon() {
-  return (
-    <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="12" fill="#25D366" />
-      <path
-        d="M12 4.5a7.5 7.5 0 1 1-3.4 14.2L4.5 19.5l.9-3.9A7.5 7.5 0 0 1 12 4.5z"
-        fill="none"
-        stroke="#fff"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9.3 8.6c.2-.2.6-.2.8.1l.7 1.4c.1.2 0 .4-.1.6l-.4.5c.6 1.2 1.5 2 2.6 2.6l.5-.5c.2-.2.4-.2.6-.1l1.4.7c.3.2.3.5.1.8-.5.9-1.5 1.2-2.4.9-2.4-.8-4.1-2.5-4.8-4.8-.2-.8 0-1.5.5-2.1z"
-        fill="#fff"
-      />
-    </svg>
-  );
-}
-
 /* =========================================
    SHARED CLASSES
 ========================================= */
@@ -166,11 +124,6 @@ const inputClass = `${fieldSurface} h-12 w-full rounded-xl px-5 text-xs font-sem
 
 const eyeButtonClass =
   "absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#5a3300] transition hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60";
-
-const socialButtonClass = `${styles.socialButton || ""} ${fieldSurface} flex h-12 cursor-not-allowed items-center gap-2 rounded-xl px-3 opacity-50 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/70`;
-
-const socialTextClass =
-  "flex-1 text-center text-[9px] font-semibold uppercase leading-snug tracking-[0.3em] text-[#9a5a00] sm:text-[11px]";
 
 /* =========================================
    SIGNUP MODAL
@@ -622,38 +575,6 @@ export default function SignupModal({
               )}
             </form>
 
-            {/* SOCIAL */}
-            <div className="mx-auto mt-8 grid max-w-[34rem] gap-4 sm:grid-cols-2 md:mt-[4cqw] md:gap-[2cqw]">
-              <button
-                type="button"
-                disabled
-                title="Login Google belum dikonfigurasi"
-                aria-label="Login dengan Google belum tersedia"
-                className={socialButtonClass}
-              >
-                <GoogleIcon />
-                <span className={socialTextClass}>
-                  Login with
-                  <br />
-                  Google (segera)
-                </span>
-              </button>
-
-              <button
-                type="button"
-                disabled
-                title="Login WhatsApp belum dikonfigurasi"
-                aria-label="Login dengan WhatsApp belum tersedia"
-                className={socialButtonClass}
-              >
-                <WhatsAppIcon />
-                <span className={socialTextClass}>
-                  Login with
-                  <br />
-                  WhatsApp (segera)
-                </span>
-              </button>
-            </div>
           </div>
         </div>
       </div>
